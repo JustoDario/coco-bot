@@ -56,78 +56,78 @@
   </actuator>
 </transmission>
 
-<transmission name="Revolución 10_tran">
+<transmission name=" lf_femur_joint_tran">
   <type>transmission_interface/SimpleTransmission</type>
-  <joint name="Revolución 10">
+  <joint name=" lf_femur_joint">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
   </joint>
-  <actuator name="Revolución 10_actr">
+  <actuator name=" lf_femur_joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     <mechanicalReduction>1</mechanicalReduction>
   </actuator>
 </transmission>
 
-<transmission name="Revolución 11_tran">
+<transmission name="rf_femur_joint_tran">
   <type>transmission_interface/SimpleTransmission</type>
-  <joint name="Revolución 11">
+  <joint name="rf_femur_joint">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
   </joint>
-  <actuator name="Revolución 11_actr">
+  <actuator name="rf_femur_joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     <mechanicalReduction>1</mechanicalReduction>
   </actuator>
 </transmission>
 
-<transmission name="Revolución 12_tran">
+<transmission name="rb_femur_joint_tran">
   <type>transmission_interface/SimpleTransmission</type>
-  <joint name="Revolución 12">
+  <joint name="rb_femur_joint">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
   </joint>
-  <actuator name="Revolución 12_actr">
+  <actuator name="rb_femur_joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     <mechanicalReduction>1</mechanicalReduction>
   </actuator>
 </transmission>
 
-<transmission name="Revolución 13_tran">
+<transmission name="lb_tibia_joint_tran">
   <type>transmission_interface/SimpleTransmission</type>
-  <joint name="Revolución 13">
+  <joint name="lb_tibia_joint">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
   </joint>
-  <actuator name="Revolución 13_actr">
+  <actuator name="lb_tibia_joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     <mechanicalReduction>1</mechanicalReduction>
   </actuator>
 </transmission>
 
-<transmission name="Revolución 14_tran">
+<transmission name="lf_tibia_joint_tran">
   <type>transmission_interface/SimpleTransmission</type>
-  <joint name="Revolución 14">
+  <joint name="lf_tibia_joint">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
   </joint>
-  <actuator name="Revolución 14_actr">
+  <actuator name="lf_tibia_joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     <mechanicalReduction>1</mechanicalReduction>
   </actuator>
 </transmission>
 
-<transmission name="Revolución 15_tran">
+<transmission name="rf_tibia_joint_tran">
   <type>transmission_interface/SimpleTransmission</type>
-  <joint name="Revolución 15">
+  <joint name="rf_tibia_joint">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
   </joint>
-  <actuator name="Revolución 15_actr">
+  <actuator name="rf_tibia_joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     <mechanicalReduction>1</mechanicalReduction>
   </actuator>
 </transmission>
 
-<transmission name="Revolución 16_tran">
+<transmission name="rb_tibia_joint_tran">
   <type>transmission_interface/SimpleTransmission</type>
-  <joint name="Revolución 16">
+  <joint name="rb_tibia_joint">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
   </joint>
-  <actuator name="Revolución 16_actr">
+  <actuator name="rb_tibia_joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     <mechanicalReduction>1</mechanicalReduction>
   </actuator>

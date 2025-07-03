@@ -258,7 +258,7 @@
 
 <link name="lb_tibia_link_1">
   <inertial>
-    <origin xyz="-0.03196384904823907 0.02772555624743414 0.0038597457608928057" rpy="0 0 0"/>
+    <origin xyz="-0.03196384904823907 0.027725556247434155 0.003859745760892816" rpy="0 0 0"/>
     <mass value="0.10314122455204974"/>
     <inertia ixx="1.8e-05" iyy="0.000196" izz="0.0002" ixy="-0.0" iyz="-1e-06" ixz="1.3e-05"/>
   </inertial>
@@ -279,7 +279,7 @@
 
 <link name="lf_tibia_link_1">
   <inertial>
-    <origin xyz="-0.03197671433292928 0.02772553703112078 0.0037573349954613177" rpy="0 0 0"/>
+    <origin xyz="-0.031976714332929285 0.02772553703112078 0.0037573349954613177" rpy="0 0 0"/>
     <mass value="0.10314122455337109"/>
     <inertia ixx="1.8e-05" iyy="0.000196" izz="0.0002" ixy="-0.0" iyz="-1e-06" ixz="1.3e-05"/>
   </inertial>
@@ -300,7 +300,7 @@
 
 <link name="rf_tibia_link_1">
   <inertial>
-    <origin xyz="-0.031502492319461874 -0.027791020823839455 0.0062624864037398" rpy="0 0 0"/>
+    <origin xyz="-0.031502492319461874 -0.02779102082383947 0.0062624864037398" rpy="0 0 0"/>
     <mass value="0.10311453435844117"/>
     <inertia ixx="2.1e-05" iyy="0.000196" izz="0.000197" ixy="-0.0" iyz="1e-06" ixz="2.7e-05"/>
   </inertial>
@@ -398,7 +398,7 @@
   <limit upper="0.0" lower="-3.141593" effort="100" velocity="100"/>
 </joint>
 
-<joint name="Revolución 10" type="revolute">
+<joint name=" lf_femur_joint" type="revolute">
   <origin xyz="-0.028498 0.023213 -0.009586" rpy="0 0 0"/>
   <parent link="lf_coax_link_1"/>
   <child link="lf_femur_link_1"/>
@@ -406,7 +406,7 @@
   <limit upper="0.0" lower="-3.141593" effort="100" velocity="100"/>
 </joint>
 
-<joint name="Revolución 11" type="revolute">
+<joint name="rf_femur_joint" type="revolute">
   <origin xyz="-0.028519 -0.023286 -0.00977" rpy="0 0 0"/>
   <parent link="rf_coax_link_1"/>
   <child link="rf_femur_link_1"/>
@@ -414,7 +414,7 @@
   <limit upper="3.141593" lower="0.0" effort="100" velocity="100"/>
 </joint>
 
-<joint name="Revolución 12" type="revolute">
+<joint name="rb_femur_joint" type="revolute">
   <origin xyz="-0.028512 -0.023338 -0.009697" rpy="0 0 0"/>
   <parent link="rb_coax_link_1"/>
   <child link="rb_femur_link_1"/>
@@ -422,7 +422,7 @@
   <limit upper="3.141593" lower="0.0" effort="100" velocity="100"/>
 </joint>
 
-<joint name="Revolución 13" type="revolute">
+<joint name="lb_tibia_joint" type="revolute">
   <origin xyz="-0.107528 0.005786 -0.002748" rpy="0 0 0"/>
   <parent link="lb_femur_link_1"/>
   <child link="lb_tibia_link_1"/>
@@ -430,7 +430,7 @@
   <limit upper="0.0" lower="-2.617994" effort="100" velocity="100"/>
 </joint>
 
-<joint name="Revolución 14" type="revolute">
+<joint name="lf_tibia_joint" type="revolute">
   <origin xyz="-0.107535 0.005786 -0.002439" rpy="0 0 0"/>
   <parent link="lf_femur_link_1"/>
   <child link="lf_tibia_link_1"/>
@@ -438,7 +438,7 @@
   <limit upper="0.0" lower="-2.617994" effort="100" velocity="100"/>
 </joint>
 
-<joint name="Revolución 15" type="revolute">
+<joint name="rf_tibia_joint" type="revolute">
   <origin xyz="-0.10741 -0.005784 -0.0026" rpy="0 0 0"/>
   <parent link="rf_femur_link_1"/>
   <child link="rf_tibia_link_1"/>
@@ -446,7 +446,7 @@
   <limit upper="2.617994" lower="0.0" effort="100" velocity="100"/>
 </joint>
 
-<joint name="Revolución 16" type="revolute">
+<joint name="rb_tibia_joint" type="revolute">
   <origin xyz="-0.1074 -0.005784 -0.003005" rpy="0 0 0"/>
   <parent link="rb_femur_link_1"/>
   <child link="rb_tibia_link_1"/>

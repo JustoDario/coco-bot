@@ -25,31 +25,31 @@ coco_controller:
     type: effort_controllers/JointPositionController
     joint: lb_femur_joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  Revolución 10_position_controller:
+   lf_femur_joint_position_controller:
     type: effort_controllers/JointPositionController
-    joint: Revolución 10
+    joint:  lf_femur_joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  Revolución 11_position_controller:
+  rf_femur_joint_position_controller:
     type: effort_controllers/JointPositionController
-    joint: Revolución 11
+    joint: rf_femur_joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  Revolución 12_position_controller:
+  rb_femur_joint_position_controller:
     type: effort_controllers/JointPositionController
-    joint: Revolución 12
+    joint: rb_femur_joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  Revolución 13_position_controller:
+  lb_tibia_joint_position_controller:
     type: effort_controllers/JointPositionController
-    joint: Revolución 13
+    joint: lb_tibia_joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  Revolución 14_position_controller:
+  lf_tibia_joint_position_controller:
     type: effort_controllers/JointPositionController
-    joint: Revolución 14
+    joint: lf_tibia_joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  Revolución 15_position_controller:
+  rf_tibia_joint_position_controller:
     type: effort_controllers/JointPositionController
-    joint: Revolución 15
+    joint: rf_tibia_joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  Revolución 16_position_controller:
+  rb_tibia_joint_position_controller:
     type: effort_controllers/JointPositionController
-    joint: Revolución 16
+    joint: rb_tibia_joint
     pid: {p: 100.0, i: 0.01, d: 10.0}

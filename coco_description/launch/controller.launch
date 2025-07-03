@@ -1,7 +1,7 @@
 <launch>
 
 <rosparam file="$(find coco_description)/launch/controller.yaml" command="load"/>
-<node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="coco" args="rf_coax_joint_position_controller lf_coax_joint_position_controller rb_coax_joint_position_controller lb_coax_joint_position_controller lb_femur_joint_position_controller Revolución 10_position_controller Revolución 11_position_controller Revolución 12_position_controller Revolución 13_position_controller Revolución 14_position_controller Revolución 15_position_controller Revolución 16_position_controller joint_state_controller "/>
+<node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="coco" args="rf_coax_joint_position_controller lf_coax_joint_position_controller rb_coax_joint_position_controller lb_coax_joint_position_controller lb_femur_joint_position_controller  lf_femur_joint_position_controller rf_femur_joint_position_controller rb_femur_joint_position_controller lb_tibia_joint_position_controller lf_tibia_joint_position_controller rf_tibia_joint_position_controller rb_tibia_joint_position_controller joint_state_controller "/>
 <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
   <remap from="/joint_states" to="/coco/joint_states"/>
 </node>
