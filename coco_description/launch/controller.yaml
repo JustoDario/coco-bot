@@ -1,0 +1,55 @@
+coco_controller:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+
+  # Position Controllers --------------------------------------
+  rf_coax_joint_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: rf_coax_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  lf_coax_joint_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: lf_coax_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  rb_coax_joint_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: rb_coax_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  lb_coax_joint_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: lb_coax_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  lb_femur_joint_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: lb_femur_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  Revolución 10_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: Revolución 10
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  Revolución 11_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: Revolución 11
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  Revolución 12_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: Revolución 12
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  Revolución 13_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: Revolución 13
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  Revolución 14_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: Revolución 14
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  Revolución 15_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: Revolución 15
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  Revolución 16_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: Revolución 16
+    pid: {p: 100.0, i: 0.01, d: 10.0}
