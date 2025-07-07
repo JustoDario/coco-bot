@@ -1,0 +1,62 @@
+<?xml version="1.0" ?>
+<robot name="coco" xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+<ros2_control name="CocoHardware" type="system">
+  <hardware>
+    <plugin>pca9685_hardware_interface/Pca9685SystemHardware</plugin>
+  </hardware>
+  <joint name="rf_coax_joint">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+  </joint>
+  <joint name="rf_femur_joint">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+  </joint>
+  <joint name="rf_tibia_joint">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+  </joint>
+  <joint name="rb_coax_joint">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+  </joint>
+  <joint name="rb_femur_joint">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+  </joint>
+  <joint name="rb_tibia_joint">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+  </joint>
+  <joint name="lf_coax_joint">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+  </joint>
+  <joint name="lf_femur_joint">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+  </joint>
+  <joint name="lf_tibia_joint">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+  </joint>
+  <joint name="lb_coax_joint">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+  </joint>
+  <joint name="lb_femur_joint">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+  </joint>
+  <joint name="lb_tibia_joint">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+  </joint>
+  <joint name="lb_coax_joint">
+    <command_interface name="position"/>
+    <state_interface name="position"/>
+  </joint>
+</ros2_control>
+
+</robot>

@@ -11,3 +11,25 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+#ifndef COCO_MOV_CONTROL__GAIT_PLANIFIER_HPP_
+#define COCO_MOV_CONTROL__GAIT_PLANIFIER_HPP_
+
+#include <rclcpp/rclcpp.hpp>
+#include <rclcpp/rclcpp.hpp>
+#include <geometry_msgs/msg/twist.hpp>
+
+namespace coco_mov_control
+{
+  class GaitPlanifier : public rclcpp::Node
+  {
+    public:
+      GaitPlanifier();
+    private:
+    
+  }
+}
+
+
+
+#endif // COCO_MOV_CONTROL__GAIT_PLANIFIER_HPP_
