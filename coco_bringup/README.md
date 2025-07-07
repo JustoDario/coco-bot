@@ -11,4 +11,4 @@ This is the package responsible to launch every necesary node/controller for Coc
     - gait_planifier_node
     - rviz(optional)
 
-When launched Coco awaits commands/interaction. 
+When launched Coco awaits commands/interaction at the moment.
