@@ -31,13 +31,13 @@ ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
 
 add_executable(gait_planifier src/gait_planifier_main.cpp)
-ament_target_dependencies(gait_planifier_main ${dependencies})
-target_link_libraries(gait_planifier_main ${PROJECT_NAME})
+ament_target_dependencies(gait_planifier ${dependencies})
+target_link_libraries(gait_planifier ${PROJECT_NAME})
 
 
 install(TARGETS
   ${PROJECT_NAME}
-  gait_planifier_main
+  gait_planifier
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}

@@ -11,3 +11,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+
+#include <memory>
+
+#include "coco_mov_control/gait_planifier.hpp"
+#include "rclcpp/rclcpp.hpp"
+
+int main(int argc, char ** argv)
+{
+  rclcpp::init(argc, argv);
+
+
+  auto node = std::make_shared<coco_mov_control::GaitPlanifier>();
+
+  rclcpp::spin(node);
+  rclcpp::shutdown();
+
+  return 0;
+}
