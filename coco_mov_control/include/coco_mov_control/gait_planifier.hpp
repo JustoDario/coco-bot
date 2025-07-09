@@ -40,7 +40,7 @@ public:
   
   void send_request(JointTrajectory & gait);
   bool is_action_finished() {return action_finished_;}
-  bool is_result_success()  {return action_succeded_;}
+  bool is_result_success()  {return action_succeeded_;}
 
 protected:
   virtual void goal_response_callback(const GoalHandleFollowJointTrajectory::SharedPtr & goal_handle);
@@ -78,7 +78,7 @@ private:
   rclcpp::Time last_twist_;
 
   }
-}
+};
 
 
 
