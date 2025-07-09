@@ -33,7 +33,7 @@ class GaitPlanifier : public rclcpp::Node
 public:
   using FollowJointTrajectory = control_msgs::action::FollowJointTrajectory;
   using JointTrajectory = trajectory_msgs::msg::JointTrajectory;
-  using GoalHandleFollowJointTrajectory = rclcpp_action::ClientGoalHandle<FolloJointTrajectory>;
+  using GoalHandleFollowJointTrajectory = rclcpp_action::ClientGoalHandle<FollowJointTrajectory>;
   using Twist = geometry_msgs::msg::Twist;
 
   GaitPlanifier();
@@ -44,7 +44,7 @@ public:
 
 protected:
   virtual void goal_response_callback(const GoalHandleFollowJointTrajectory::SharedPtr & goal_handle);
-  virtual void result_callback(const GoalHandleFollowJointTrajectory::WrappedResult & result);
+  virtual void result_callback(const GoalHandleFollowJointTrajectory::WrappedResult & wrapped_result);
 
 private:
   void twist_callback(const Twist::ConstSharedPtr & twist);
@@ -63,7 +63,7 @@ private:
   static const int LAST_MOV_FINISHED = 2;
   int state_;
   bool action_finished_ {true};
-  bool action_succeded_ {true};
+  bool action_succeeded_ {true};
 
   std::vector<std::string> joint_names_;
   float curve_amplitude_; //future implementation

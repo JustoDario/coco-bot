@@ -135,7 +135,7 @@ GaitPlanifier::get_step_time(std::vector<std::vector<float>> trajectory_points, 
 {
   //This will clamp the velocity received and map it to values that coco can achive
 // Clamp velocity to [0, 1.5]
-  float clamped_vel = std::clamp(vel, 0, 1.5);
+  float clamped_vel = std::clamp(vel, 0.0f, 1.5f);
   
   // Map absolute velocity from [0, 1.5] to [min_vel_, max_vel_] = [0.15, 0.4]
   float mapped_vel = min_vel_ + (clamped_vel / 1.5f) * (max_vel_ - min_vel_);
@@ -238,7 +238,7 @@ GaitPlanifier::twist_callback(const Twist::ConstSharedPtr & twist)
 {
   if(current_twist_!= *twist){
     current_twist_ =  *twist;
-    current_trajectory_ = get_joint_trajectory(current_twist);
+    current_trajectory_ = get_joint_trajectory(current_twist_);
   }
   last_twist_ = this->now();
   state_ = WALKING;
@@ -358,7 +358,7 @@ GaitPlanifier::result_callback(const GoalHandleFollowJointTrajectory::WrappedRes
 void
 GaitPlanifier::control_cycle()
 {
-  if(state_ != STANDBY && (this->now - last_twist_ )> 1s) {
+  if(state_ != STANDBY && (this->now() - last_twist_ )> 1s) {
     state_ = STANDBY;
   }
   if(action_finished_){
