@@ -1,0 +1,8 @@
+<library path="coco_hardware">
+  <class name="coco_hardware/Pca9685SystemHardware"
+         type="coco_hardware::Pca9685SystemHardware"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      The ros2_control PCA9685 is using a system hardware interface-type. It publishes PWM commands (which are mapped to positions) </description>
+  </class>
+</library>

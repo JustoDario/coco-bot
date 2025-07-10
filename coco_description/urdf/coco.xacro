@@ -2,8 +2,7 @@
 <robot name="coco" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 <xacro:include filename="$(find coco_description)/urdf/materials.xacro" />
-<xacro:include filename="$(find coco_description)/urdf/coco.trans" />
-<xacro:include filename="$(find coco_description)/urdf/coco.gazebo" />
+<xacro:include filename="$(find coco_description)/urdf/coco.ros2_control.xacro" />
 <link name="base_link">
   <inertial>
     <origin xyz="0.01719416873843675 -0.010586956103026538 -0.030271020725176637" rpy="0 0 0"/>
@@ -398,7 +397,7 @@
   <limit upper="0.0" lower="-3.141593" effort="100" velocity="100"/>
 </joint>
 
-<joint name=" lf_femur_joint" type="revolute">
+<joint name="lf_femur_joint" type="revolute">
   <origin xyz="-0.028498 0.023213 -0.009586" rpy="0 0 0"/>
   <parent link="lf_coax_link_1"/>
   <child link="lf_femur_link_1"/>

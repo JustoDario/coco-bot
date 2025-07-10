@@ -2,10 +2,8 @@
 
 import os
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
-from launch.conditions import IfCondition, UnlessCondition
+from launch.actions import DeclareLaunchArgument
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
-from launch.event_handlers import OnProcessExit
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
@@ -17,8 +15,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "description_package",
             default_value="coco_description",
-            description="Description package with robot URDF/XACRO files. Usually the argument \
-        is not set, it enables use of a custom description.",
+            description="Description package with robot URDF/XACRO files.",
         )
     )
     declared_arguments.append(
@@ -35,19 +32,11 @@ def generate_launch_description():
             description="YAML file with the controllers configuration.",
         )
     )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "launch_rviz",
-            default_value="false",
-            description="Start RViz2 automatically with this launch file.",
-        )
-    )
 
     # Initialize Arguments
     description_package = LaunchConfiguration("description_package")
     description_file = LaunchConfiguration("description_file")
     controllers_file = LaunchConfiguration("controllers_file")
-    launch_rviz = LaunchConfiguration("launch_rviz")
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -79,6 +68,7 @@ def generate_launch_description():
         package="controller_manager",
         executable="spawner",
         arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+        output="screen",
     )
 
     # Joint trajectory controller
@@ -86,6 +76,7 @@ def generate_launch_description():
         package="controller_manager",
         executable="spawner",
         arguments=["joint_trajectory_controller", "--controller-manager", "/controller_manager"],
+        output="screen",
     )
 
     # Robot state publisher
@@ -96,7 +87,7 @@ def generate_launch_description():
         parameters=[robot_description],
     )
 
-    # Joint state publisher
+    # Joint state publisher (para debugging)
     joint_state_publisher_node = Node(
         package="joint_state_publisher",
         executable="joint_state_publisher",
@@ -109,58 +100,21 @@ def generate_launch_description():
         ],
     )
 
-    # Gait planifier node
-    gait_planifier_node = Node(
-        package="coco_mov_control",
-        executable="gait_planifier",
-        name="gait_planifier",
+    # Simple test node to send commands (opcional)
+    test_commander_node = Node(
+        package="rqt_joint_trajectory_controller",
+        executable="rqt_joint_trajectory_controller",
+        name="test_commander",
         output="screen",
-    )
-
-    # RViz2
-    #rviz_config_file = PathJoinSubstitution(
-    #    [FindPackageShare(description_package), "rviz", "coco.rviz"]
-    #)
-    #rviz_node = Node(
-    #    package="rviz2",
-    #    executable="rviz2",
-    #    name="rviz2",
-    #    output="log",
-    #    arguments=["-d", rviz_config_file],
-    #    condition=IfCondition(launch_rviz),
-    #)
-
-    # Delay start of controller spawner after controller_manager
-    delay_joint_state_broadcaster_spawner_after_controller_manager = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=controller_manager_node,
-            on_exit=[joint_state_broadcaster_spawner],
-        )
-    )
-
-    delay_joint_trajectory_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[joint_trajectory_controller_spawner],
-        )
-    )
-
-    # Delay start of gait planifier after joint trajectory controller
-    delay_gait_planifier_after_joint_trajectory_controller_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_trajectory_controller_spawner,
-            on_exit=[gait_planifier_node],
-        )
     )
 
     nodes = [
         controller_manager_node,
         robot_state_pub_node,
         joint_state_publisher_node,
-        #rviz_node,
-        delay_joint_state_broadcaster_spawner_after_controller_manager,
-        delay_joint_trajectory_controller_spawner_after_joint_state_broadcaster_spawner,
-        delay_gait_planifier_after_joint_trajectory_controller_spawner,
+        joint_state_broadcaster_spawner,
+        joint_trajectory_controller_spawner,
+        test_commander_node,
     ]
 
     return LaunchDescription(declared_arguments + nodes)

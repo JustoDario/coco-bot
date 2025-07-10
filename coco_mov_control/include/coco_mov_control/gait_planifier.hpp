@@ -60,7 +60,7 @@ private:
 
   static const int STANDBY = 0;
   static const int WALKING = 1;
-  static const int LAST_MOV_FINISHED = 2;
+  static const int EXECUTING = 2;
   int state_;
   bool action_finished_ {true};
   bool action_succeeded_ {true};

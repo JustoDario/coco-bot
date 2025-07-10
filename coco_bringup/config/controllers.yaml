@@ -1,0 +1,37 @@
+controller_manager:
+  ros__parameters:
+    joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+      joints:
+        - lf_coax_joint
+        - lf_femur_joint
+        - lf_tibia_joint
+        - rf_coax_joint
+        - rf_femur_joint
+        - rf_tibia_joint
+        - lb_coax_joint
+        - lb_femur_joint
+        - lb_tibia_joint
+        - rb_coax_joint
+        - rb_femur_joint
+        - rb_tibia_joint
+      state_publish_rate: 50
+      command_publish_rate: 50
+      constraints:
+        stopped_velocity_tolerance: 0.5
+        goal_time: 1
+        lf_coax_joint: { trajectory: 0.5, goal: 0.5 }
+        lf_femur_joint: { trajectory: 0.5, goal: 0.5 }
+        lf_tibia_joint: { trajectory: 0.5, goal: 0.5 }
+        rf_coax_joint: { trajectory: 0.5, goal: 0.5 }
+        rf_femur_joint: { trajectory: 0.5, goal: 0.5 }
+        rf_tibia_joint: { trajectory: 0.5, goal: 0.5 }
+        lb_coax_joint: { trajectory: 0.5, goal: 0.5 }
+        lb_femur_joint: { trajectory: 0.5, goal: 0.5 }
+        lb_tibia_joint: { trajectory: 0.5, goal: 0.5 }
+        rb_coax_joint: { trajectory: 0.5, goal: 0.5 }
+        rb_femur_joint: { trajectory: 0.5, goal: 0.5 }
+        rb_tibia_joint: { trajectory: 0.5, goal: 0.5 }
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+      publish_rate: 50

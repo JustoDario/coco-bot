@@ -218,8 +218,8 @@ GaitPlanifier::get_joint_trajectory(const Twist & twist)
     result_gait.points.resize(ngait_points_);
     step_time = get_step_time(joint_positions, movement_velocity);
     for (size_t i = 0; i < ngait_points_; i++) {
-          result_gait.points[i].positions.resize(ngait_points_);
-          for(size_t j; j < njoints_ ; j++) {
+          result_gait.points[i].positions.resize(njoints_);
+          for(size_t j = 0; j < njoints_ ; j++) {
             result_gait.points[i].positions[j] = joint_positions[i][j];
           }
           // Times depending on velocity received
@@ -243,7 +243,10 @@ GaitPlanifier::get_joint_trajectory(const Twist & twist)
 void
 GaitPlanifier::twist_callback(const Twist::ConstSharedPtr & twist)
 {
-  if(current_twist_!= *twist){
+  if(current_twist_.linear.x != twist->linear.x &&
+    current_twist_.linear.y != twist->linear.y &&
+    current_twist_.angular.z != twist->angular.z){
+
     current_twist_ =  *twist;
     current_trajectory_ = get_joint_trajectory(current_twist_);
   }
@@ -270,7 +273,7 @@ GaitPlanifier::send_request(JointTrajectory& gait)
   goal.goal_time_tolerance = rclcpp::Duration::from_seconds(1.0);
   action_finished_ = false;
   action_succeeded_ = false;
-
+  state_ = WALKING;
   if (!action_client_->wait_for_action_server()) {
     RCLCPP_ERROR(this->get_logger(), "Action server not available after waiting");
     rclcpp::shutdown();
@@ -368,24 +371,27 @@ GaitPlanifier::control_cycle()
   if(state_ != STANDBY && (this->now() - last_twist_ )> 1s) {
     state_ = STANDBY;
   }
-  if(action_finished_){
-    switch(state_) {
-      case STANDBY:
-        current_twist_ = standby_twist_;
-        current_trajectory_ = get_joint_trajectory(standby_twist_);
-        send_request(current_trajectory_);
-        break;
-
-      case WALKING:
-        current_trajectory_ = get_joint_trajectory(current_twist_); 
-        send_request(current_trajectory_);
-        break;
-
-      default:
-        break;
-
-    }
+  if (!action_finished_) {
+    return;
   }
-}
+  switch (state_) {
+    case STANDBY:
+      // In standby and no movement required -> send standby_pos
+      current_trajectory_ = get_joint_trajectory(standby_twist_);
+      send_request(current_trajectory_);
+      state_ = EXECUTING;
+      break;
 
+    case WALKING:
+      // New twist and anterior has finished -> send current_twist trajectory
+      current_trajectory_ = get_joint_trajectory(current_twist_);
+      send_request(current_trajectory_);
+      state_ = EXECUTING;
+      break;
+
+    case EXECUTING:
+      // Waiting action_finished
+      break;
+  }
+  }
 }
