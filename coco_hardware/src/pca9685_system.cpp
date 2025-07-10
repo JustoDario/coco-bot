@@ -53,6 +53,16 @@ hardware_interface::CallbackReturn Pca9685SystemHardware::on_init(
   hw_commands_.resize(info_.joints.size(), std::numeric_limits<float>::quiet_NaN());
   hw_states_.resize(info_.joints.size(), std::numeric_limits<float>::quiet_NaN());
 
+  RCLCPP_INFO(
+    rclcpp::get_logger("Pca9685SystemHardware"),
+    "Initializing hardware with %zu joints", info_.joints.size());
+  
+  for (const auto& joint : info_.joints) {
+    RCLCPP_INFO(
+      rclcpp::get_logger("Pca9685SystemHardware"),
+      "Joint: %s", joint.name.c_str());
+  }
+
   for (const hardware_interface::ComponentInfo & joint : info_.joints)
   {
     // Pca9685System has one command interface on each output
@@ -99,6 +109,16 @@ std::vector<hardware_interface::CommandInterface> Pca9685SystemHardware::export_
   {
     command_interfaces.emplace_back(hardware_interface::CommandInterface(
       info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_commands_[i]));
+  }
+
+  RCLCPP_INFO(
+    rclcpp::get_logger("Pca9685SystemHardware"),
+    "Exported %zu command interfaces", command_interfaces.size());
+  
+  for (const auto& interface : command_interfaces) {
+    RCLCPP_INFO(
+      rclcpp::get_logger("Pca9685SystemHardware"),
+      "Command interface: %s", interface.get_name().c_str());
   }
 
   return command_interfaces;
