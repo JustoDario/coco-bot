@@ -13,6 +13,7 @@
 // limitations under the License.
 #include <algorithm>
 #include "coco_mov_control/gait_planifier.hpp"
+#include "trajectory_msgs/msg/joint_trajectory.hpp"
 
 namespace
 { //Falta revisar si para los servos que estan en posicion contraria el angulo se invierte
@@ -108,6 +109,7 @@ namespace
 }
 namespace coco_mov_control
 {
+using JointTrajectory = trajectory_msgs::msg::JointTrajectory;
 using namespace std::chrono_literals;
 using std::placeholders::_1;
 using std::placeholders::_2;
@@ -211,21 +213,26 @@ GaitPlanifier::get_joint_trajectory(const Twist & twist)
     //Not supported
     joint_positions = DEFAULT_STANDBY;
   }
+  ngait_points_ = joint_positions.size();
   if(joint_positions != DEFAULT_STANDBY) {
-    result_gait.points.resize(joint_positions.size());
+    result_gait.points.resize(ngait_points_);
     step_time = get_step_time(joint_positions, movement_velocity);
-    for (int i = 0; i < joint_positions.size(); i++) {
-          result_gait.points[i].positions.resize(joint_names_.size());
-          result_gait.points[i].positions = joint_positions[i];
+    for (size_t i = 0; i < ngait_points_; i++) {
+          result_gait.points[i].positions.resize(ngait_points_);
+          for(size_t j; j < njoints_ ; j++) {
+            result_gait.points[i].positions[j] = joint_positions[i][j];
+          }
           // Times depending on velocity received
           result_gait.points[i].time_from_start.sec = 0;
           result_gait.points[i].time_from_start.nanosec =  static_cast<uint32_t>(step_time * 1e9) * (i + 1);;
     }
   }
   else {
-    result_gait.points.resize(DEFAULT_STANDBY.size());
-    result_gait.points[0].positions.resize(joint_names_.size());
-    result_gait.points[0].positions = joint_positions[0];
+    result_gait.points.resize(1);
+    result_gait.points[0].positions.resize(njoints_);
+    for(size_t i; i < njoints_ ; i++) {
+      result_gait.points[0].positions[i] = joint_positions[0][i];
+    }
     result_gait.points[0].time_from_start.sec = 0;
     result_gait.points[0].time_from_start.nanosec = 125000000;
   }
@@ -319,34 +326,34 @@ GaitPlanifier::result_callback(const GoalHandleFollowJointTrajectory::WrappedRes
 
   // Check specific state of FollowJointTrajectory
   const auto & result = wrapped_result.result;
-  switch (result.error_code) {
+  switch (result->error_code) {
     case control_msgs::action::FollowJointTrajectory::Result::SUCCESSFUL:
       RCLCPP_INFO(get_logger(), "Trajectory followed succesfully");
       action_succeeded_ = true;
       break;
     case control_msgs::action::FollowJointTrajectory::Result::INVALID_GOAL:
-      RCLCPP_ERROR(get_logger(), "Error: INVALID_GOAL — %s", result.error_string.c_str());
+      RCLCPP_ERROR(get_logger(), "Error: INVALID_GOAL — %s", result->error_string.c_str());
       action_succeeded_ = false;
       break;
     case control_msgs::action::FollowJointTrajectory::Result::INVALID_JOINTS:
-      RCLCPP_ERROR(get_logger(), "Error: INVALID_JOINTS — %s", result.error_string.c_str());
+      RCLCPP_ERROR(get_logger(), "Error: INVALID_JOINTS — %s", result->error_string.c_str());
       action_succeeded_ = false;
       break;
     case control_msgs::action::FollowJointTrajectory::Result::OLD_HEADER_TIMESTAMP:
-      RCLCPP_ERROR(get_logger(), "Error: OLD_HEADER_TIMESTAMP — %s", result.error_string.c_str());
+      RCLCPP_ERROR(get_logger(), "Error: OLD_HEADER_TIMESTAMP — %s", result->error_string.c_str());
       action_succeeded_ = false;
       break;
     case control_msgs::action::FollowJointTrajectory::Result::PATH_TOLERANCE_VIOLATED:
-      RCLCPP_ERROR(get_logger(), "Error: PATH_TOLERANCE_VIOLATED — %s", result.error_string.c_str());
+      RCLCPP_ERROR(get_logger(), "Error: PATH_TOLERANCE_VIOLATED — %s", result->error_string.c_str());
       action_succeeded_ = false;
       break;
     case control_msgs::action::FollowJointTrajectory::Result::GOAL_TOLERANCE_VIOLATED:
-      RCLCPP_ERROR(get_logger(), "Error: GOAL_TOLERANCE_VIOLATED — %s", result.error_string.c_str());
+      RCLCPP_ERROR(get_logger(), "Error: GOAL_TOLERANCE_VIOLATED — %s", result->error_string.c_str());
       action_succeeded_ = false;
       break;
     default:
       RCLCPP_ERROR(get_logger(), "Error desconocido en ejecución de trayectoria: %d — %s",
-                   result.error_code, result.error_string.c_str());
+                   result->error_code, result->error_string.c_str());
       action_succeeded_ = false;
       break;
   }

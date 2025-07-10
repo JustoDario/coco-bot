@@ -68,6 +68,8 @@ private:
   std::vector<std::string> joint_names_;
   float curve_amplitude_; //future implementation
   float jump_intensity_;  //future implementation 
+  size_t ngait_points_;
+  const size_t njoints_ = 12;
 
   JointTrajectory current_trajectory_;
   Twist current_twist_;
