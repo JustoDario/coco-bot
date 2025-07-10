@@ -51,6 +51,7 @@ hardware_interface::CallbackReturn Pca9685SystemHardware::on_init(
   }
 
   hw_commands_.resize(info_.joints.size(), std::numeric_limits<float>::quiet_NaN());
+  hw_states_.resize(info_.joints.size(), std::numeric_limits<float>::quiet_NaN());
 
   for (const hardware_interface::ComponentInfo & joint : info_.joints)
   {
@@ -112,6 +113,10 @@ hardware_interface::CallbackReturn Pca9685SystemHardware::on_activate(
     {
       hw_commands_[i] = 0;
     }
+    if (std::isnan(hw_states_[i]))
+    {
+      hw_states_[i] = 0;
+    }
   }
 
   RCLCPP_INFO(rclcpp::get_logger("Pca9685SystemHardware"), "Successfully activated!");
@@ -156,7 +161,7 @@ double Pca9685SystemHardware::command_to_duty_cycle(double command){
     double max_us = 2500;
     //Gaitplanifier shouldnt write rads outside range but in case
     double clamped_command = std::clamp(command , min_rads, max_rads);
-    return min_us + ((command - min_rads) * (max_us - min_us)) / (max_rads - min_rads);
+    return min_us + ((clamped_command - min_rads) * (max_us - min_us)) / (max_rads - min_rads);
 
 
 }
