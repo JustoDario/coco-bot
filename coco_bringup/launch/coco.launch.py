@@ -65,6 +65,9 @@ def generate_launch_description():
     controllers_file_path = PathJoinSubstitution(
         [FindPackageShare("coco_bringup"), "config", controllers_file]
     )
+    controllers_spawner_file_path = PathJoinSubstitution(
+        [FindPackageShare("coco_bringup"), "config", "controllers_spawner.yaml"]
+    )
 
     # Controller manager node
     controller_manager_node = Node(
@@ -78,14 +81,24 @@ def generate_launch_description():
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+        arguments=[
+            "joint_state_broadcaster",
+            "--controller-manager", "/controller_manager",
+            "--param-file", controllers_spawner_file_path
+        ],
+        output="screen",
     )
 
     # Joint trajectory controller
     joint_trajectory_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_trajectory_controller", "--controller-manager", "/controller_manager"],
+        arguments=[
+            "joint_trajectory_controller",
+            "--controller-manager", "/controller_manager",
+            "--param-file", controllers_spawner_file_path
+        ],
+        output="screen",
     )
 
     # Robot state publisher
