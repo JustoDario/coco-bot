@@ -52,7 +52,7 @@ def generate_launch_description():
 
     # Get controllers file
     controllers_file_path = PathJoinSubstitution(
-        [FindPackageShare("coco_bringup"), "config", controllers_file]
+        [FindPackageShare("coco_hardware"), "config", controllers_file]
     )
 
     # Controller manager node
@@ -100,21 +100,12 @@ def generate_launch_description():
         ],
     )
 
-    # Simple test node to send commands (opcional)
-    test_commander_node = Node(
-        package="rqt_joint_trajectory_controller",
-        executable="rqt_joint_trajectory_controller",
-        name="test_commander",
-        output="screen",
-    )
-
     nodes = [
         controller_manager_node,
         robot_state_pub_node,
         joint_state_publisher_node,
         joint_state_broadcaster_spawner,
         joint_trajectory_controller_spawner,
-        test_commander_node,
     ]
 
     return LaunchDescription(declared_arguments + nodes)

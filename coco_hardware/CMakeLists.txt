@@ -63,6 +63,12 @@ install(DIRECTORY
   DESTINATION share/${PROJECT_NAME}
 )
 
+# Install config files
+install(DIRECTORY
+  config
+  DESTINATION share/${PROJECT_NAME}
+)
+
 install(TARGETS coco_hardware
   EXPORT export_coco_hardware
   ARCHIVE DESTINATION lib
