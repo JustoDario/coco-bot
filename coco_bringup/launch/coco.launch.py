@@ -130,37 +130,14 @@ def generate_launch_description():
     #    condition=IfCondition(launch_rviz),
     #)
 
-    # Delay start of controller spawner after controller_manager
-    delay_joint_state_broadcaster_spawner_after_controller_manager = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=controller_manager_node,
-            on_exit=[joint_state_broadcaster_spawner],
-        )
-    )
-
-    delay_joint_trajectory_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[joint_trajectory_controller_spawner],
-        )
-    )
-
-    # Delay start of gait planifier after joint trajectory controller
-    delay_gait_planifier_after_joint_trajectory_controller_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_trajectory_controller_spawner,
-            on_exit=[gait_planifier_node],
-        )
-    )
-
     nodes = [
         controller_manager_node,
         robot_state_pub_node,
         joint_state_publisher_node,
+        joint_state_broadcaster_spawner,
+        joint_trajectory_controller_spawner,
+        gait_planifier_node,
         #rviz_node,
-        delay_joint_state_broadcaster_spawner_after_controller_manager,
-        delay_joint_trajectory_controller_spawner_after_joint_state_broadcaster_spawner,
-        delay_gait_planifier_after_joint_trajectory_controller_spawner,
     ]
 
     return LaunchDescription(declared_arguments + nodes)
