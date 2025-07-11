@@ -35,6 +35,18 @@ hardware_interface::CallbackReturn Pca9685SystemHardware::on_init(
   try {
     pca = std::make_unique<PiPCA9685::PCA9685>("/dev/i2c-1", 0x40);  // Default I2C bus and PCA9685 address
     pca->set_pwm_freq(50.0);
+    
+    // Immediately set all servos to 90 degrees to prevent dangerous movement
+    RCLCPP_INFO(
+      rclcpp::get_logger("Pca9685SystemHardware"),
+      "Setting all servos to 90 degrees immediately after PCA9685 initialization");
+    
+    for (auto i = 0u; i < 12; i++) {  // 12 servos
+      double duty_cycle = command_to_duty_cycle(M_PI / 2.0 + servos_offsets_[i]);
+      duty_cycle = std::clamp(duty_cycle, 500.0, 2500.0);
+      pca->set_pwm_ms(i, duty_cycle/1000.0);
+    }
+    
   } catch (const std::exception& e) {
     RCLCPP_ERROR(
       rclcpp::get_logger("Pca9685SystemHardware"),
@@ -62,6 +74,16 @@ hardware_interface::CallbackReturn Pca9685SystemHardware::on_init(
       rclcpp::get_logger("Pca9685SystemHardware"),
       "Joint: %s", joint.name.c_str());
   }
+
+  // Initialize all servos to 90 degrees (π/2 radians) - safe middle position
+  for (auto i = 0u; i < hw_commands_.size(); i++) {
+    hw_commands_[i] = M_PI / 2.0;  // 90 degrees
+    hw_states_[i] = M_PI / 2.0;     // 90 degrees
+  }
+
+  RCLCPP_INFO(
+    rclcpp::get_logger("Pca9685SystemHardware"),
+    "All servos initialized to 90 degrees (π/2 radians)");
 
   for (const hardware_interface::ComponentInfo & joint : info_.joints)
   {
@@ -189,18 +211,37 @@ double Pca9685SystemHardware::command_to_duty_cycle(double command){
 hardware_interface::return_type Pca9685SystemHardware::write(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
+  // Only send commands if PCA9685 is initialized
+  if (!pca) {
+    RCLCPP_WARN_ONCE(
+      rclcpp::get_logger("Pca9685SystemHardware"),
+      "PCA9685 not initialized, skipping write");
+    return hardware_interface::return_type::OK;
+  }
+
   hw_states_ = hw_commands_;
   transform_angles(hw_commands_);
+  
   for (auto i = 0u; i < hw_commands_.size(); i++)
   { 
+    // Check if command is valid (not NaN)
+    if (std::isnan(hw_commands_[i])) {
+      RCLCPP_WARN_ONCE(
+        rclcpp::get_logger("Pca9685SystemHardware"),
+        "Joint %d has NaN command, skipping", i);
+      continue;
+    }
 
     double duty_cycle = command_to_duty_cycle(hw_commands_[i] + servos_offsets_[i]);
+    
+    // Clamp duty cycle to safe range (0.5ms to 2.5ms)
+    duty_cycle = std::clamp(duty_cycle, 500.0, 2500.0);
+    
     // RCLCPP_INFO(
     //     rclcpp::get_logger("Pca9685SystemHardware"),
     //     "Joint '%d' has command '%f', duty_cycle: '%f'.", i, hw_commands_[i], duty_cycle);
 
     pca->set_pwm_ms(i, duty_cycle/1000.0);
-
   }
 
   return hardware_interface::return_type::OK;
