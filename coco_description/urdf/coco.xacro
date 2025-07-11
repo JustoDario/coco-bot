@@ -3,6 +3,7 @@
 
 <xacro:include filename="$(find coco_description)/urdf/materials.xacro" />
 <xacro:include filename="$(find coco_description)/urdf/coco.ros2_control.xacro" />
+
 <link name="base_link">
   <inertial>
     <origin xyz="0.01719416873843675 -0.010586956103026538 -0.030271020725176637" rpy="0 0 0"/>
