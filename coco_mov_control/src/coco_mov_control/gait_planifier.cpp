@@ -119,7 +119,10 @@ GaitPlanifier::GaitPlanifier()
 {
   action_client_ = rclcpp_action::create_client<coco_mov_control::GaitPlanifier::FollowJointTrajectory>(
   this, "/joint_trajectory_controller/follow_joint_trajectory");
-    
+  bool sim_time = this->get_parameter_or("use_sim_time", false);
+  if (sim_time) {
+    RCLCPP_WARN(this->get_logger(), "use_sim_time está en true, pero este nodo debe usar wall time.");
+  }
   twist_sub_ = create_subscription<Twist>(
   "cmd_vel", 1, std::bind(&GaitPlanifier::twist_callback, this, _1));
   timer_ = create_wall_timer(
@@ -167,7 +170,8 @@ GaitPlanifier::get_joint_trajectory(const Twist & twist)
     ,for each keyframe.More info about keyframes i README.md
   */
   JointTrajectory result_gait;
-  result_gait.header.stamp = this->now();
+  result_gait.header.stamp.sec = 0;
+  result_gait.header.stamp.nanosec = 0;
   result_gait.header.frame_id = "";
   result_gait.joint_names = joint_names_;
   std::vector<std::vector<float>> joint_positions;
