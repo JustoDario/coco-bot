@@ -125,9 +125,8 @@ GaitPlanifier::GaitPlanifier()
   }
   twist_sub_ = create_subscription<Twist>(
   "cmd_vel", 1, std::bind(&GaitPlanifier::twist_callback, this, _1));
-  timer_ = create_wall_timer(
+  timer_ = this->create_wall_timer(
     50ms, std::bind(&GaitPlanifier::control_cycle, this));
-  
   joint_names_ = {"lf_coax_joint","lf_femur_joint","lf_tibia_joint",
                   "rf_coax_joint","rf_femur_joint","rf_tibia_joint",
                   "lb_coax_joint","lb_femur_joint","lb_tibia_joint",
@@ -257,7 +256,7 @@ GaitPlanifier::twist_callback(const Twist::ConstSharedPtr & twist)
     current_twist_ =  *twist;
     current_trajectory_ = get_joint_trajectory(current_twist_);
   }
-  last_twist_ = this->now();
+  last_twist_ = steady_clock_.now();
   state_ = WALKING;
 }
 
@@ -375,7 +374,7 @@ GaitPlanifier::result_callback(const GoalHandleFollowJointTrajectory::WrappedRes
 void
 GaitPlanifier::control_cycle()
 {
-  if(state_ != STANDBY && (this->now() - last_twist_ )> 1s) {
+  if((steady_clock_.now() - last_twist_) > std::chrono::seconds(1)) {
     state_ = STANDBY;
   }
   if (!action_finished_) {
@@ -384,9 +383,12 @@ GaitPlanifier::control_cycle()
   switch (state_) {
     case STANDBY:
       // In standby and no movement required -> send standby_pos
-      current_trajectory_ = get_joint_trajectory(standby_twist_);
-      send_request(current_trajectory_);
-      state_ = EXECUTING;
+      if(current_twist_ != standby_twist_) {
+        current_trajectory_ = get_joint_trajectory(standby_twist_);
+        current_twist_ = standby_twist_;
+        send_request(current_trajectory_);
+        state_ = EXECUTING;
+      }
       break;
 
     case WALKING:

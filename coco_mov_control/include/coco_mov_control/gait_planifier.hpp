@@ -80,6 +80,9 @@ private:
   rclcpp::TimerBase::SharedPtr timer_;
   rclcpp::Time last_twist_;
 
+
+  rclcpp::Clock steady_clock_{RCL_STEADY_TIME};
+  
 };
 }
 
