@@ -1,29 +1,25 @@
-controller_manager:
+joint_trajectory_controller:
   ros__parameters:
-    joint_trajectory_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
-      joints:
-        - lf_coax_joint
-        - lf_femur_joint
-        - lf_tibia_joint
-        - rf_coax_joint
-        - rf_femur_joint
-        - rf_tibia_joint
-        - lb_coax_joint
-        - lb_femur_joint
-        - lb_tibia_joint
-        - rb_coax_joint
-        - rb_femur_joint
-        - rb_tibia_joint
-      command_interfaces:
-        - position
-      state_interfaces:
-        - position
-      state_publish_rate: 50
-      command_publish_rate: 50
-      constraints:
-        stopped_velocity_tolerance: 0.5
-        goal_time: 1
-    joint_state_broadcaster:
-      type: joint_state_broadcaster/JointStateBroadcaster
-      publish_rate: 50 
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - lf_coax_joint
+      - lf_femur_joint
+      - lf_tibia_joint
+      - rf_coax_joint
+      - rf_femur_joint
+      - rf_tibia_joint
+      - lb_coax_joint
+      - lb_femur_joint
+      - lb_tibia_joint
+      - rb_coax_joint
+      - rb_femur_joint
+      - rb_tibia_joint
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+    state_publish_rate: 50
+    command_publish_rate: 50
+    constraints:
+      stopped_velocity_tolerance: 0.5
+      goal_time: 1
