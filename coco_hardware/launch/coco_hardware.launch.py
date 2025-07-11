@@ -3,7 +3,7 @@
 import os
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution, ThisLaunchFileDir
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
@@ -50,12 +50,15 @@ def generate_launch_description():
     )
     robot_description = {"robot_description": robot_description_content}
 
-    # Get controllers file
+    # Rutas a los archivos de configuración
     controllers_file_path = PathJoinSubstitution(
         [FindPackageShare("coco_hardware"), "config", controllers_file]
     )
+    controllers_spawner_file_path = PathJoinSubstitution(
+        [FindPackageShare("coco_hardware"), "config", "controllers_spawner.yaml"]
+    )
 
-    # Controller manager node
+    # Nodo principal controller_manager
     controller_manager_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
@@ -63,19 +66,27 @@ def generate_launch_description():
         output="both",
     )
 
-    # Joint state broadcaster
+    # Spawner joint_state_broadcaster
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+        arguments=[
+            "joint_state_broadcaster",
+            "--controller-manager", "/controller_manager",
+            "--param-file", controllers_spawner_file_path
+        ],
         output="screen",
     )
 
-    # Joint trajectory controller
+    # Spawner joint_trajectory_controller
     joint_trajectory_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_trajectory_controller", "--controller-manager", "/controller_manager"],
+        arguments=[
+            "joint_trajectory_controller",
+            "--controller-manager", "/controller_manager",
+            "--param-file", controllers_spawner_file_path
+        ],
         output="screen",
     )
 
