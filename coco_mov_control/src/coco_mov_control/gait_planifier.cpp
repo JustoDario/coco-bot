@@ -118,7 +118,7 @@ GaitPlanifier::GaitPlanifier()
 : Node("gait_planifier")
 {
   action_client_ = rclcpp_action::create_client<coco_mov_control::GaitPlanifier::FollowJointTrajectory>(
-  this, "follow_joint_trajectory");
+  this, "/joint_trajectory_controller/follow_joint_trajectory");
     
   twist_sub_ = create_subscription<Twist>(
   "cmd_vel", 1, std::bind(&GaitPlanifier::twist_callback, this, _1));
