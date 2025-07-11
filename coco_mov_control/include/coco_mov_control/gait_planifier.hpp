@@ -74,6 +74,7 @@ private:
   JointTrajectory current_trajectory_;
   Twist current_twist_;
   Twist standby_twist_;
+
   rclcpp_action::Client<FollowJointTrajectory>::SharedPtr action_client_;
   rclcpp::Subscription<Twist>::SharedPtr twist_sub_;
   rclcpp::TimerBase::SharedPtr timer_;

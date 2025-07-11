@@ -130,6 +130,9 @@ GaitPlanifier::GaitPlanifier()
                   "lb_coax_joint","lb_femur_joint","lb_tibia_joint",
                   "rb_coax_joint","rb_femur_joint","rb_tibia_joint"};
   state_ = STANDBY;
+  standby_twist_.linear.x = 0.0;
+  standby_twist_.linear.y = 0.0;
+  standby_twist_.angular.z = 0.0;
 
 }
 float

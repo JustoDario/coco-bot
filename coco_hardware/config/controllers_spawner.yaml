@@ -18,11 +18,11 @@ joint_trajectory_controller:
       - position
     state_interfaces:
       - position
-    state_publish_rate: 50
-    command_publish_rate: 50
+    state_publish_rate: 50.0
+    command_publish_rate: 50.0
     constraints:
       stopped_velocity_tolerance: 0.5
-      goal_time: 1
+      goal_time: 1.0
 
 joint_state_broadcaster:
   ros__parameters:
