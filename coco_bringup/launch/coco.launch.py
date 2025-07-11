@@ -130,6 +130,14 @@ def generate_launch_description():
         output="screen",
     )
 
+    # Event handler para lanzar gait_planifier después del spawner del joint_trajectory_controller
+    delay_gait_planifier_after_joint_trajectory_controller_spawner = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=joint_trajectory_controller_spawner,
+            on_exit=[gait_planifier_node],
+        )
+    )
+
     # RViz2
     #rviz_config_file = PathJoinSubstitution(
     #    [FindPackageShare(description_package), "rviz", "coco.rviz"]
@@ -149,7 +157,7 @@ def generate_launch_description():
         joint_state_publisher_node,
         joint_state_broadcaster_spawner,
         joint_trajectory_controller_spawner,
-        gait_planifier_node,
+        delay_gait_planifier_after_joint_trajectory_controller_spawner,
         #rviz_node,
     ]
 
