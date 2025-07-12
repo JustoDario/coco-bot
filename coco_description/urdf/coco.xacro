@@ -13,14 +13,14 @@
   <visual>
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -34,14 +34,14 @@
   <visual>
     <origin xyz="0.106086 0.004256 0.004897" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/rear_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/rear_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="0.106086 0.004256 0.004897" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/rear_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/rear_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -55,14 +55,14 @@
   <visual>
     <origin xyz="-0.115911 0.004871 0.005051" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/_front_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/_front_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="-0.115911 0.004871 0.005051" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/_front_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/_front_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -76,14 +76,14 @@
   <visual>
     <origin xyz="0.025005 0.004393 0.060788" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/laser_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/laser_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="0.025005 0.004393 0.060788" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/laser_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/laser_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -97,14 +97,14 @@
   <visual>
     <origin xyz="-0.17289 0.043844 -0.001027" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/rf_coax_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/rf_coax_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="-0.17289 0.043844 -0.001027" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/rf_coax_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/rf_coax_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -118,14 +118,14 @@
   <visual>
     <origin xyz="-0.172927 -0.034155 -0.001125" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/lf_coax_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/lf_coax_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="-0.172927 -0.034155 -0.001125" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/lf_coax_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/lf_coax_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -139,14 +139,14 @@
   <visual>
     <origin xyz="0.106596 0.043339 -0.001713" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/rb_coax_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/rb_coax_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="0.106596 0.043339 -0.001713" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/rb_coax_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/rb_coax_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -160,14 +160,14 @@
   <visual>
     <origin xyz="0.106596 -0.034661 -0.001613" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/lb_coax_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/lb_coax_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="0.106596 -0.034661 -0.001613" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/lb_coax_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/lb_coax_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -181,14 +181,14 @@
   <visual>
     <origin xyz="0.1351 -0.057832 0.008048" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/lb_femur_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/lb_femur_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="0.1351 -0.057832 0.008048" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/lb_femur_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/lb_femur_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -202,14 +202,14 @@
   <visual>
     <origin xyz="-0.144429 -0.057368 0.008461" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/lf_femur_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/lf_femur_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="-0.144429 -0.057368 0.008461" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/lf_femur_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/lf_femur_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -223,14 +223,14 @@
   <visual>
     <origin xyz="-0.144371 0.06713 0.008743" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/rf_femur_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/rf_femur_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="-0.144371 0.06713 0.008743" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/rf_femur_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/rf_femur_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -244,14 +244,14 @@
   <visual>
     <origin xyz="0.135108 0.066677 0.007984" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/rb_femur_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/rb_femur_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="0.135108 0.066677 0.007984" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/rb_femur_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/rb_femur_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -265,14 +265,14 @@
   <visual>
     <origin xyz="0.242628 -0.063618 0.010796" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/lb_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/lb_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="0.242628 -0.063618 0.010796" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/lb_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/lb_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -286,14 +286,14 @@
   <visual>
     <origin xyz="-0.036894 -0.063154 0.0109" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/lf_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/lf_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="-0.036894 -0.063154 0.0109" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/lf_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/lf_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -307,14 +307,14 @@
   <visual>
     <origin xyz="-0.036961 0.072914 0.011343" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/rf_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/rf_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="-0.036961 0.072914 0.011343" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/rf_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/rf_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -328,14 +328,14 @@
   <visual>
     <origin xyz="0.242508 0.072461 0.010989" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/rb_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/rb_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="0.242508 0.072461 0.010989" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://coco_description/meshes/rb_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://$(find coco_description)/meshes/rb_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>

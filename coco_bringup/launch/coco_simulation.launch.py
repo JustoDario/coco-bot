@@ -9,6 +9,19 @@ from launch.substitutions import Command, FindExecutable, LaunchConfiguration, P
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch.event_handlers import OnProcessExit
+from launch.actions import ExecuteProcess
+from launch_ros.parameter_descriptions import ParameterValue
+
+spawn_entity = Node(
+    package='ros_gz_sim',
+    executable='create',
+    arguments=[
+        '-name', 'coco',
+        '-topic', 'robot_description',
+        '-x', '0', '-y', '0', '-z', '0.2'
+    ],
+    output='screen'
+)
 
 def generate_launch_description():
     # Argumentos
@@ -37,7 +50,9 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "world",
-            default_value="empty.world",
+            default_value=PathJoinSubstitution([
+                FindPackageShare("coco_bringup"), "worlds", "empty_world.sdf"
+            ]),
             description="Archivo de mundo de Gazebo.",
         )
     )
@@ -62,7 +77,11 @@ def generate_launch_description():
         " ",
         PathJoinSubstitution([FindPackageShare(description_package), "urdf", description_file]),
     ])
-    robot_description = {"robot_description": robot_description_content}
+    robot_description = {
+        "robot_description": ParameterValue(
+            robot_description_content, value_type=str
+        )
+    }
 
     # Paths de controladores
     controllers_file_path = PathJoinSubstitution(
@@ -73,11 +92,9 @@ def generate_launch_description():
     )
 
     # Lanzar Gazebo
-    gazebo_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            PathJoinSubstitution([FindPackageShare('gazebo_ros'), 'launch', 'gazebo.launch.py'])
-        ]),
-        launch_arguments={'world': world}.items(),
+    gazebo_launch = ExecuteProcess(
+        cmd=['gz', 'sim', '-v', '4', LaunchConfiguration('world')],
+        output='screen'
     )
 
     # Nodo robot_state_publisher
@@ -144,6 +161,7 @@ def generate_launch_description():
         joint_state_broadcaster_spawner,
         joint_trajectory_controller_spawner,
         delay_gait_planifier_after_joint_trajectory_controller_spawner,
+        spawn_entity,
         # rviz_node,
     ]
 
