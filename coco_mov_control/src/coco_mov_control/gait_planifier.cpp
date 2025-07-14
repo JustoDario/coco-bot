@@ -381,7 +381,7 @@ GaitPlanifier::control_cycle()
     state_ = STANDBY;
   }
   */
- if((system_clock_.now() - last_twist_) > std::chrono::seconds(1)) {
+ if((system_clock_.now() - last_twist_) > 2s) {
     state_ = STANDBY;
   }
   if (!action_finished_) {
@@ -390,7 +390,8 @@ GaitPlanifier::control_cycle()
   switch (state_) {
     case STANDBY:
       // In standby and no movement required -> send standby_pos
-      if(current_twist_ != standby_twist_) {
+      if(current_twist_ != standby_twist_)
+        RCLCPP_INFO(get_logger(), "outdated vel,proceding to standby");
         current_trajectory_ = get_joint_trajectory(standby_twist_);
         current_twist_ = standby_twist_;
         send_request(current_trajectory_);
@@ -400,6 +401,7 @@ GaitPlanifier::control_cycle()
 
     case WALKING:
       // New twist and anterior has finished -> send current_twist trajectory
+      RCLCPP_INFO(get_logger(), "Sending action");
       current_trajectory_ = get_joint_trajectory(current_twist_);
       send_request(current_trajectory_);
       state_ = EXECUTING;
