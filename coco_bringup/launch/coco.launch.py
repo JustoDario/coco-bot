@@ -141,14 +141,14 @@ def generate_launch_description():
     # RViz2
     #rviz_config_file = PathJoinSubstitution(
     #    [FindPackageShare(description_package), "rviz", "coco.rviz"]
-    #)
-    #rviz_node = Node(
+   # )
+   # rviz_node = Node(
     #    package="rviz2",
-    #    executable="rviz2",
-    #    name="rviz2",
-    #    output="log",
-    #    arguments=["-d", rviz_config_file],
-    #    condition=IfCondition(launch_rviz),
+     #   executable="rviz2",
+      #  name="rviz2",
+       # output="log",
+       # arguments=["-d", rviz_config_file],
+      #  condition=IfCondition(launch_rviz),
     #)
 
     nodes = [

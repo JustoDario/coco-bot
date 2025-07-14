@@ -139,12 +139,12 @@ GaitPlanifier::calculate_joint_positions(const std::vector<std::array<float, 3>>
     result_positions[i][3] = standby_legs_angles[0];
     result_positions[i][4] = standby_legs_angles[1];
     result_positions[i][5] = standby_legs_angles[2];
-    result_positions[i][6] = moving_legs_angles[0];
-    result_positions[i][7] = moving_legs_angles[1];
-    result_positions[i][8] = moving_legs_angles[2];
-    result_positions[i][9] = standby_legs_angles[0];
-    result_positions[i][10] = standby_legs_angles[1];
-    result_positions[i][11] = standby_legs_angles[2];
+    result_positions[i][6] = standby_legs_angles[0];
+    result_positions[i][7] = standby_legs_angles[1];
+    result_positions[i][8] = standby_legs_angles[2];
+    result_positions[i][9] = moving_legs_angles[0];
+    result_positions[i][10] = moving_legs_angles[1];
+    result_positions[i][11] = moving_legs_angles[2];
   }
   return result_positions;
 }
