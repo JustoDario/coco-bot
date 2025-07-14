@@ -27,7 +27,7 @@ def generate_launch_description():
     # Initial robot pose
     declare_x_cmd = DeclareLaunchArgument('x', default_value='0.0')
     declare_y_cmd = DeclareLaunchArgument('y', default_value='0.0')
-    declare_z_cmd = DeclareLaunchArgument('z', default_value='0.0')
+    declare_z_cmd = DeclareLaunchArgument('z', default_value='2.0')
     declare_roll_cmd = DeclareLaunchArgument('R', default_value='0.0')
     declare_pitch_cmd = DeclareLaunchArgument('P', default_value='0.0')
     declare_yaw_cmd = DeclareLaunchArgument('Y', default_value='0.0')

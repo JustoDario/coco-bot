@@ -1,168 +1,96 @@
+# Copyright (c) 2025 Justo Dario Valverde
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-#!/usr/bin/env python3
 
 import os
-from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, RegisterEventHandler
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
-from launch_ros.actions import Node
-from launch_ros.substitutions import FindPackageShare
-from launch.event_handlers import OnProcessExit
-from launch.actions import ExecuteProcess
-from launch_ros.parameter_descriptions import ParameterValue
 
-spawn_entity = Node(
-    package='ros_gz_sim',
-    executable='create',
-    arguments=[
-        '-name', 'coco',
-        '-topic', 'robot_description',
-        '-x', '0', '-y', '0', '-z', '0.2'
-    ],
-    output='screen'
+from ament_index_python.packages import get_package_share_directory
+
+from launch import LaunchDescription
+from launch.actions import (
+    DeclareLaunchArgument,
+    IncludeLaunchDescription,
+    SetEnvironmentVariable
 )
+from launch.conditions import IfCondition
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
+
 
 def generate_launch_description():
-    # Argumentos
-    declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "description_package",
-            default_value="coco_description",
-            description="Paquete con los xacro/urdf del robot.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "description_file",
-            default_value="coco.gazebo.xacro",
-            description="Archivo XACRO para simulación.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "controllers_file",
-            default_value="controllers.yaml",
-            description="YAML de controladores.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "world",
-            default_value=PathJoinSubstitution([
-                FindPackageShare("coco_bringup"), "worlds", "empty_world.sdf"
-            ]),
-            description="Archivo de mundo de Gazebo.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "launch_rviz",
-            default_value="false",
-            description="Lanzar RViz2.",
-        )
+
+    world_arg = DeclareLaunchArgument(
+        'world', default_value=os.path.join(
+            get_package_share_directory('aws_robomaker_small_house_world'),
+            'worlds',
+            'small_house.world'))
+
+    gui_arg = DeclareLaunchArgument(
+        'gui',
+        default_value='true',
+        description='Set to false to run gazebo headless',
     )
 
-    # Inicialización de argumentos
-    description_package = LaunchConfiguration("description_package")
-    description_file = LaunchConfiguration("description_file")
-    controllers_file = LaunchConfiguration("controllers_file")
-    world = LaunchConfiguration("world")
-    launch_rviz = LaunchConfiguration("launch_rviz")
-
-    # Obtener URDF desde xacro
-    robot_description_content = Command([
-        PathJoinSubstitution([FindExecutable(name="xacro")]),
-        " ",
-        PathJoinSubstitution([FindPackageShare(description_package), "urdf", description_file]),
-    ])
-    robot_description = {
-        "robot_description": ParameterValue(
-            robot_description_content, value_type=str
-        )
-    }
-
-    # Paths de controladores
-    controllers_file_path = PathJoinSubstitution(
-        [FindPackageShare("coco_bringup"), "config", controllers_file]
-    )
-    controllers_spawner_file_path = PathJoinSubstitution(
-        [FindPackageShare("coco_bringup"), "config", "controllers_spawner.yaml"]
+    gazebo_server = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(get_package_share_directory('ros_gz_sim'), 'launch',
+                         'gz_sim.launch.py')),
+        launch_arguments={'gz_args': ['-r -s ', LaunchConfiguration('world')]}.items()
     )
 
-    # Lanzar Gazebo
-    gazebo_launch = ExecuteProcess(
-        cmd=['gz', 'sim', '-v', '4', LaunchConfiguration('world')],
-        output='screen'
+    gazebo_client = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(get_package_share_directory('ros_gz_sim'),
+                         'launch',
+                         'gz_sim.launch.py')
+        ),
+        launch_arguments={'gz_args': [' -g ']}.items(),
+        condition=IfCondition(LaunchConfiguration('gui')),
     )
 
-    # Nodo robot_state_publisher
-    robot_state_pub_node = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        output="both",
-        parameters=[robot_description],
+    spawn_robot = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(
+            get_package_share_directory('coco_description'),
+            'launch/'), 'spawn.launch.py']),
     )
 
-    # Spawners de controladores
-    joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
-            "joint_state_broadcaster",
-            "--controller-manager", "/controller_manager",
-            "--param-file", controllers_spawner_file_path
-        ],
-        output="screen",
+    gait_planifier = Node(
+        package='coco_mov_control',
+        executable='gait_planifier',
+        name='gait_planifier',
+        output='screen',
     )
 
-    joint_trajectory_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
-            "joint_trajectory_controller",
-            "--controller-manager", "/controller_manager",
-            "--param-file", controllers_spawner_file_path
-        ],
-        output="screen",
-    )
+    model_path = ''
+    resource_path = ''
+    pkg_path = get_package_share_directory('coco_bringup')
+    model_path += os.path.join(pkg_path, 'models')
+    resource_path += pkg_path + model_path
 
-    # Event handler para lanzar el gait_planifier después del spawner
-    gait_planifier_node = Node(
-        package="coco_mov_control",
-        executable="gait_planifier",
-        name="gait_planifier",
-        output="screen",
-    )
-    delay_gait_planifier_after_joint_trajectory_controller_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_trajectory_controller_spawner,
-            on_exit=[gait_planifier_node],
-        )
-    )
+    if 'GZ_SIM_MODEL_PATH' in os.environ:
+        model_path += os.pathsep+os.environ['GZ_SIM_MODEL_PATH']
+    if 'GZ_SIM_RESOURCE_PATH' in os.environ:
+        resource_path += os.pathsep+os.environ['GZ_SIM_RESOURCE_PATH']
 
-    # (Opcional) RViz2
-    # rviz_config_file = PathJoinSubstitution(
-    #     [FindPackageShare(description_package), "rviz", "coco.rviz"]
-    # )
-    # rviz_node = Node(
-    #     package="rviz2",
-    #     executable="rviz2",
-    #     name="rviz2",
-    #     output="log",
-    #     arguments=["-d", rviz_config_file],
-    #     condition=IfCondition(launch_rviz),
-    # )
+    ld = LaunchDescription()
+    ld.add_action(SetEnvironmentVariable('GZ_SIM_RESOURCE_PATH', model_path))
+    ld.add_action(world_arg)
+    ld.add_action(gui_arg)
+    ld.add_action(gazebo_server)
+    ld.add_action(gazebo_client)
+    ld.add_action(spawn_robot)
+    ld.add_action(gait_planifier)
 
-    nodes = [
-        gazebo_launch,
-        robot_state_pub_node,
-        joint_state_broadcaster_spawner,
-        joint_trajectory_controller_spawner,
-        delay_gait_planifier_after_joint_trajectory_controller_spawner,
-        spawn_entity,
-        # rviz_node,
-    ]
-
-    return LaunchDescription(declared_arguments + nodes)
+    return ld

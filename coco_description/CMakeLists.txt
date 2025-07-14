@@ -11,6 +11,8 @@ find_package(ament_cmake REQUIRED)
 # Install URDF/XACRO files
 install(DIRECTORY
   urdf
+  launch
+  config
   meshes
   DESTINATION share/${PROJECT_NAME}
 )

@@ -12,6 +12,7 @@ find_package(ament_cmake REQUIRED)
 install(DIRECTORY
   launch
   config
+  models
   DESTINATION share/${PROJECT_NAME}
 )
 install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
@@ -19,6 +20,7 @@ install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
 # Instala mundos de simulación
 install(DIRECTORY
   worlds
+  models
   DESTINATION share/${PROJECT_NAME}
 )
 
