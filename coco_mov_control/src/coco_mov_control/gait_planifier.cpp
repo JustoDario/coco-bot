@@ -257,8 +257,8 @@ GaitPlanifier::twist_callback(const Twist::ConstSharedPtr & twist)
     current_trajectory_ = get_joint_trajectory(current_twist_);
   }
 
-  //last_twist_ = steady_clock_.now();
-  last_twist_ = system_clock_.now();
+  last_twist_ = steady_clock_.now();
+  //last_twist_ = system_clock_.now();
   state_ = WALKING;
 }
 
@@ -376,14 +376,16 @@ GaitPlanifier::result_callback(const GoalHandleFollowJointTrajectory::WrappedRes
 void
 GaitPlanifier::control_cycle()
 { 
-  /*
+  
   if((steady_clock_.now() - last_twist_) > std::chrono::seconds(1)) {
     state_ = STANDBY;
   }
-  */
+  
+ /*
  if((system_clock_.now() - last_twist_) > 2s) {
     state_ = STANDBY;
   }
+  */
   if (!action_finished_) {
     return;
   }
