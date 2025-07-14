@@ -47,10 +47,12 @@ protected:
   virtual void result_callback(const GoalHandleFollowJointTrajectory::WrappedResult & wrapped_result);
 
 private:
+  std::array<float, 3> get_leg_angles(const std::array<float, 3>& foot_goal_position);
+  std::vector<std::array<float, 12>> calculate_joint_positions(const std::vector<std::array<float, 3>>& gait_points_per_leg);
   void twist_callback(const Twist::ConstSharedPtr & twist);
   void control_cycle();
   JointTrajectory get_joint_trajectory(const Twist & twist);
-  float get_step_time(std::vector<std::vector<float>> trajectory_points, float vel);
+  float get_step_time(std::vector<std::array<float, 12>> trajectory_points, float vel);
   
   //Values obtained through experimentation with coco -> may change with better gaits
   const float max_vel_ = 0.4;

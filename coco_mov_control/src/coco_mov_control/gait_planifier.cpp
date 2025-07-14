@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-#include <algorithm>
+#include <cmath>
 #include "coco_mov_control/gait_planifier.hpp"
 #include "trajectory_msgs/msg/joint_trajectory.hpp"
 
@@ -19,93 +19,20 @@ namespace
 { //Falta revisar si para los servos que estan en posicion contraria el angulo se invierte
   //En el hardware interface se ajustara eso
   //De momento para rpobar todos los gaits son hacia delante default
-  std::vector<std::vector<float>> DEFAULT_FORWARD_GAIT = {
-  {1.5708,1.5708,1.5708,1.5421,0.8948,1.2368,1.5421,0.8948,1.2368,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5449,0.8210,1.3958,1.5449,0.8210,1.3958,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5449,0.7021,1.4155,1.5449,0.7021,1.4155,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.7640,1.2574,1.5421,0.7640,1.2574,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.8303,1.2445,1.5421,0.8303,1.2445,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.8071,1.2484,1.5421,0.8071,1.2484,1.5708,1.5708,1.5708},
-  {1.5421,0.8948,1.2368,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8948,1.2368},
-  {1.5449,0.8210,1.3958,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5449,0.8210,1.3958},
-  {1.5449,0.7021,1.4155,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5449,0.7021,1.4155},
-  {1.5421,0.7640,1.2574,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.7640,1.2574},
-  {1.5421,0.8303,1.2445,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8303,1.2445},
-  {1.5421,0.8071,1.2484,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8071,1.2484}
+  std::vector<std::array<float, 3>> DEFAULT_FORWARD_GAIT = {
+    {-8.0, 140.0, 36.0},
+    {-8.0, 155.0, 36.0},
+    {-25.0, 155.0, 36.0},
+    {-25.0, 140.0, 36.0},
+    {-16.5, 140.0, 36.0},
+    {-19.5 ,140.0, 36.0}
   };
-  std::vector<std::vector<float>> DEFAULT_BACKWARD_GAIT = {
-  {1.5708,1.5708,1.5708,1.5421,0.8948,1.2368,1.5421,0.8948,1.2368,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5449,0.8210,1.3958,1.5449,0.8210,1.3958,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5449,0.7021,1.4155,1.5449,0.7021,1.4155,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.7640,1.2574,1.5421,0.7640,1.2574,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.8303,1.2445,1.5421,0.8303,1.2445,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.8071,1.2484,1.5421,0.8071,1.2484,1.5708,1.5708,1.5708},
-  {1.5421,0.8948,1.2368,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8948,1.2368},
-  {1.5449,0.8210,1.3958,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5449,0.8210,1.3958},
-  {1.5449,0.7021,1.4155,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5449,0.7021,1.4155},
-  {1.5421,0.7640,1.2574,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.7640,1.2574},
-  {1.5421,0.8303,1.2445,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8303,1.2445},
-  {1.5421,0.8071,1.2484,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8071,1.2484}
-  };
-  std::vector<std::vector<float>> DEFAULT_LEFT_GAIT = {
-  {1.5708,1.5708,1.5708,1.5421,0.8948,1.2368,1.5421,0.8948,1.2368,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5449,0.8210,1.3958,1.5449,0.8210,1.3958,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5449,0.7021,1.4155,1.5449,0.7021,1.4155,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.7640,1.2574,1.5421,0.7640,1.2574,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.8303,1.2445,1.5421,0.8303,1.2445,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.8071,1.2484,1.5421,0.8071,1.2484,1.5708,1.5708,1.5708},
-  {1.5421,0.8948,1.2368,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8948,1.2368},
-  {1.5449,0.8210,1.3958,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5449,0.8210,1.3958},
-  {1.5449,0.7021,1.4155,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5449,0.7021,1.4155},
-  {1.5421,0.7640,1.2574,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.7640,1.2574},
-  {1.5421,0.8303,1.2445,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8303,1.2445},
-  {1.5421,0.8071,1.2484,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8071,1.2484}
-  };
-  std::vector<std::vector<float>> DEFAULT_RIGHT_GAIT = {
-  {1.5708,1.5708,1.5708,1.5421,0.8948,1.2368,1.5421,0.8948,1.2368,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5449,0.8210,1.3958,1.5449,0.8210,1.3958,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5449,0.7021,1.4155,1.5449,0.7021,1.4155,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.7640,1.2574,1.5421,0.7640,1.2574,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.8303,1.2445,1.5421,0.8303,1.2445,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.8071,1.2484,1.5421,0.8071,1.2484,1.5708,1.5708,1.5708},
-  {1.5421,0.8948,1.2368,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8948,1.2368},
-  {1.5449,0.8210,1.3958,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5449,0.8210,1.3958},
-  {1.5449,0.7021,1.4155,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5449,0.7021,1.4155},
-  {1.5421,0.7640,1.2574,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.7640,1.2574},
-  {1.5421,0.8303,1.2445,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8303,1.2445},
-  {1.5421,0.8071,1.2484,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8071,1.2484}
-  };
-  std::vector<std::vector<float>> DEFAULT_RIGHT_SPIN = {
-  {1.5708,1.5708,1.5708,1.5421,0.8948,1.2368,1.5421,0.8948,1.2368,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5449,0.8210,1.3958,1.5449,0.8210,1.3958,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5449,0.7021,1.4155,1.5449,0.7021,1.4155,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.7640,1.2574,1.5421,0.7640,1.2574,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.8303,1.2445,1.5421,0.8303,1.2445,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.8071,1.2484,1.5421,0.8071,1.2484,1.5708,1.5708,1.5708},
-  {1.5421,0.8948,1.2368,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8948,1.2368},
-  {1.5449,0.8210,1.3958,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5449,0.8210,1.3958},
-  {1.5449,0.7021,1.4155,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5449,0.7021,1.4155},
-  {1.5421,0.7640,1.2574,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.7640,1.2574},
-  {1.5421,0.8303,1.2445,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8303,1.2445},
-  {1.5421,0.8071,1.2484,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8071,1.2484}
-  };
-  std::vector<std::vector<float>> DEFAULT_LEFT_SPIN = {
-  {1.5708,1.5708,1.5708,1.5421,0.8948,1.2368,1.5421,0.8948,1.2368,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5449,0.8210,1.3958,1.5449,0.8210,1.3958,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5449,0.7021,1.4155,1.5449,0.7021,1.4155,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.7640,1.2574,1.5421,0.7640,1.2574,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.8303,1.2445,1.5421,0.8303,1.2445,1.5708,1.5708,1.5708},
-  {1.5708,1.5708,1.5708,1.5421,0.8071,1.2484,1.5421,0.8071,1.2484,1.5708,1.5708,1.5708},
-  {1.5421,0.8948,1.2368,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8948,1.2368},
-  {1.5449,0.8210,1.3958,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5449,0.8210,1.3958},
-  {1.5449,0.7021,1.4155,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5449,0.7021,1.4155},
-  {1.5421,0.7640,1.2574,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.7640,1.2574},
-  {1.5421,0.8303,1.2445,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8303,1.2445},
-  {1.5421,0.8071,1.2484,1.5708,1.5708,1.5708,1.5708,1.5708,1.5708,1.5421,0.8071,1.2484}
-  };
-  std::vector<std::vector<float>> DEFAULT_STANDBY = {
-    {1.5708,0.6807,1.2902,1.5708,0.6807,1.2902,1.5708,0.6807,1.2902,1.5708,0.6807,1.2902}
-  };
+  std::vector<std::array<float, 3>> DEFAULT_BACKWARD_GAIT ;
+  std::vector<std::array<float, 3>> DEFAULT_LEFT_GAIT ;
+  std::vector<std::array<float, 3>> DEFAULT_RIGHT_GAIT;
+  std::vector<std::array<float, 3>> DEFAULT_RIGHT_SPIN ;
+  std::vector<std::array<float, 3>> DEFAULT_LEFT_SPIN;
+  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{-35.0, 140.0, 40.0}}; 
 }
 namespace coco_mov_control
 {
@@ -138,7 +65,7 @@ GaitPlanifier::GaitPlanifier()
 
 }
 float
-GaitPlanifier::get_step_time(std::vector<std::vector<float>> trajectory_points, float vel)
+GaitPlanifier::get_step_time(std::vector<std::array<float, 12>> trajectory_points, float vel)
 {
   //This will clamp the velocity received and map it to values that coco can achive
 // Clamp velocity to [0, 1.5]
@@ -159,7 +86,68 @@ GaitPlanifier::get_step_time(std::vector<std::vector<float>> trajectory_points, 
   
   return time_per_point;
 }
+std::array<float, 3>
+GaitPlanifier::get_leg_angles(const std::array<float, 3>& foot_goal_position)
+{
+  /* This function uses inverse kinematics, receibes the desired positioning
+  of the foot of one leg, and calculates the necesary angles in rads for
+  coxa femur and tibia.
+  More details in project readme
+  */
+  float x = foot_goal_position[0];  //forward/backward separation
+  float y = foot_goal_position[1];  //distance between foot and coxa(altitude)
+  float z = foot_goal_position[2];  //lateral distance between foot and coxa
+  // Calculate coxa angle
+  float parte1_coxa = std::atan(z / y);
+  float arg_raiz_coxa = (z * z + y * y) - 1600.0f;
+  float parte2_coxa = std::atan(std::sqrt(arg_raiz_coxa) / 40.0f);
+  float coxa_rad = parte1_coxa + parte2_coxa;
 
+  // Calculate tibia angle
+  float arg_acos_tibia = ((z * z + y * y) - 1600.0f + x * x - 28800.0f) / -28800.0f;
+  float tibia_rad = std::acos(arg_acos_tibia);
+
+  // Calculate femur angle
+  float arg_raiz_femur1 = (z * z + y * y) - 1600.0f;
+  float parte1_femur = std::atan(x / std::sqrt(arg_raiz_femur1));
+
+  float arg_raiz_femur2 = arg_raiz_femur1 + x * x;
+  float arg_asin_femur = (120.0f * std::sin(tibia_rad)) / std::sqrt(arg_raiz_femur2);
+  float parte2_femur = std::asin(arg_asin_femur);
+
+  float femur_rad = parte1_femur + parte2_femur;
+
+  return { coxa_rad, femur_rad, tibia_rad };
+
+}
+std::vector<std::array<float, 12>>
+GaitPlanifier::calculate_joint_positions(const std::vector<std::array<float, 3>>& gait_steps_per_leg)
+{
+  size_t n_steps = gait_steps_per_leg.size();
+  std::vector<std::array<float, 12>> result_positions;
+  result_positions.resize(n_steps);
+  /* for each step, legs are ordered front left, front right, back left, back right
+  and right now only gait_type supported is intercalated (first 2 opossing legs,then the other 2);
+  */ 
+  for(size_t i = 0; i < n_steps; i++)
+  {
+    std::array<float, 3> moving_legs_angles = get_leg_angles(gait_steps_per_leg[i]);
+    std::array<float, 3> standby_legs_angles = get_leg_angles(DEFAULT_STANDBY[0]);
+    result_positions[i][0] = moving_legs_angles[0];
+    result_positions[i][1] = moving_legs_angles[1];
+    result_positions[i][2] = moving_legs_angles[2];
+    result_positions[i][3] = standby_legs_angles[0];
+    result_positions[i][4] = standby_legs_angles[1];
+    result_positions[i][5] = standby_legs_angles[2];
+    result_positions[i][6] = moving_legs_angles[0];
+    result_positions[i][7] = moving_legs_angles[1];
+    result_positions[i][8] = moving_legs_angles[2];
+    result_positions[i][9] = standby_legs_angles[0];
+    result_positions[i][10] = standby_legs_angles[1];
+    result_positions[i][11] = standby_legs_angles[2];
+  }
+  return result_positions;
+}
 
 JointTrajectory 
 GaitPlanifier::get_joint_trajectory(const Twist & twist)
@@ -173,54 +161,55 @@ GaitPlanifier::get_joint_trajectory(const Twist & twist)
   result_gait.header.stamp.nanosec = 0;
   result_gait.header.frame_id = "";
   result_gait.joint_names = joint_names_;
-  std::vector<std::vector<float>> joint_positions;
+  std::vector<std::array<float ,12>> joint_positions;
   float step_time;
   float movement_velocity;
 
   if(twist.linear.x != 0 && twist.linear.y == 0 && twist.angular.z == 0) {
     if(twist.linear.x > 0) {
-      joint_positions = DEFAULT_FORWARD_GAIT;
+      joint_positions = calculate_joint_positions(DEFAULT_FORWARD_GAIT);
     }
     else {
-      joint_positions = DEFAULT_BACKWARD_GAIT;
+      joint_positions = calculate_joint_positions(DEFAULT_BACKWARD_GAIT);;
     }
     movement_velocity = std::abs(twist.linear.x);
   }
   else if(twist.linear.x == 0 && twist.linear.y != 0 && twist.angular.z == 0) {
     if(twist.linear.y > 0) {
-      joint_positions = DEFAULT_LEFT_GAIT;
+      joint_positions = calculate_joint_positions(DEFAULT_LEFT_GAIT);
     }
     else {
-      joint_positions = DEFAULT_RIGHT_GAIT;
+      joint_positions = calculate_joint_positions(DEFAULT_RIGHT_GAIT);
     }
     movement_velocity = std::abs(twist.linear.y);
   }
   else if(twist.linear.x == 0 && twist.linear.y == 0 && twist.angular.z != 0) {
     if(twist.angular.z > 0) {
-      joint_positions = DEFAULT_LEFT_SPIN;
+      joint_positions = calculate_joint_positions(DEFAULT_LEFT_SPIN);
     }
     else {
-      joint_positions = DEFAULT_RIGHT_SPIN;
+      joint_positions = calculate_joint_positions(DEFAULT_RIGHT_SPIN);;
     }
     movement_velocity = std::abs(twist.angular.z);
   }
   else if(twist.linear.x != 0 && twist.linear.y == 0 && twist.angular.z != 0) {
-    joint_positions = DEFAULT_STANDBY;
+    joint_positions = calculate_joint_positions(DEFAULT_STANDBY);
     //Not yet supported but will in the future make a specific gait for this case
   }
   else if((twist.linear.x == 0 && twist.linear.y == 0 && twist.angular.z == 0)) {
-    joint_positions = DEFAULT_STANDBY;
+    joint_positions = calculate_joint_positions(DEFAULT_STANDBY);
   }
   else if(twist.linear.x != 0 && twist.linear.y != 0 && twist.angular.z == 0) {
-    joint_positions = DEFAULT_STANDBY;
+    joint_positions = calculate_joint_positions(DEFAULT_STANDBY);
     //Not yet supported but will in the future make a specific gait for this case
   }
   else {
     //Not supported
-    joint_positions = DEFAULT_STANDBY;
+    joint_positions = calculate_joint_positions(DEFAULT_STANDBY);
   }
   ngait_points_ = joint_positions.size();
-  if(joint_positions != DEFAULT_STANDBY) {
+  //Aqui puedo quitar el if y hacer que este trozo de funcion valga para ambos casos?
+  if(joint_positions != calculate_joint_positions(DEFAULT_STANDBY)) {
     result_gait.points.resize(ngait_points_);
     step_time = get_step_time(joint_positions, movement_velocity);
     for (size_t i = 0; i < ngait_points_; i++) {
