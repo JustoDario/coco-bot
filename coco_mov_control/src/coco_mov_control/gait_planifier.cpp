@@ -236,7 +236,7 @@ GaitPlanifier::get_joint_trajectory(const Twist & twist)
   else {
     result_gait.points.resize(1);
     result_gait.points[0].positions.resize(njoints_);
-    for(size_t i; i < njoints_ ; i++) {
+    for(size_t i = 0; i < njoints_ ; i++) {
       result_gait.points[0].positions[i] = joint_positions[0][i];
     }
     result_gait.points[0].time_from_start.sec = 0;
