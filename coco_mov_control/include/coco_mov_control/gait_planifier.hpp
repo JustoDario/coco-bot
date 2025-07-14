@@ -81,8 +81,8 @@ private:
   rclcpp::Time last_twist_;
 
 
-  rclcpp::Clock steady_clock_{RCL_STEADY_TIME};
-  //rclcpp::Clock system_clock_{RCL_SYSTEM_TIME};
+  // rclcpp::Clock steady_clock_{RCL_STEADY_TIME};
+  rclcpp::Clock system_clock_{RCL_SYSTEM_TIME};
 
 };
 }
