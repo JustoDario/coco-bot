@@ -168,6 +168,15 @@ hardware_interface::CallbackReturn Pca9685SystemHardware::on_activate(
 hardware_interface::CallbackReturn Pca9685SystemHardware::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
+  RCLCPP_INFO(rclcpp::get_logger("Pca9685SystemHardware"), "Deactivating: moving all servos to safe position (90 deg)");
+
+  if (pca) {
+    for (auto i = 0u; i < 12; i++) {
+      double duty_cycle = command_to_duty_cycle(M_PI / 2.0 + servos_offsets_[i]);
+      duty_cycle = std::clamp(duty_cycle, 500.0, 2500.0);
+      pca->set_pwm_ms(i, duty_cycle/1000.0);
+    }
+  }
   RCLCPP_INFO(rclcpp::get_logger("Pca9685SystemHardware"), "Successfully deactivated!");
   return hardware_interface::CallbackReturn::SUCCESS;
 }
