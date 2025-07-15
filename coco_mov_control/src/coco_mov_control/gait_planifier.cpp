@@ -133,18 +133,34 @@ GaitPlanifier::calculate_joint_positions(const std::vector<std::array<float, 3>>
   {
     std::array<float, 3> moving_legs_angles = get_leg_angles(gait_steps_per_leg[i]);
     std::array<float, 3> standby_legs_angles = get_leg_angles(DEFAULT_STANDBY[0]);
-    result_positions[i][0] = moving_legs_angles[0];
-    result_positions[i][1] = moving_legs_angles[1];
-    result_positions[i][2] = moving_legs_angles[2];
-    result_positions[i][3] = standby_legs_angles[0];
-    result_positions[i][4] = standby_legs_angles[1];
-    result_positions[i][5] = standby_legs_angles[2];
-    result_positions[i][6] = standby_legs_angles[0];
-    result_positions[i][7] = standby_legs_angles[1];
-    result_positions[i][8] = standby_legs_angles[2];
-    result_positions[i][9] = moving_legs_angles[0];
-    result_positions[i][10] = moving_legs_angles[1];
-    result_positions[i][11] = moving_legs_angles[2];
+    if(i%2 == 0){
+      result_positions[i][0] = moving_legs_angles[0];
+      result_positions[i][1] = moving_legs_angles[1];
+      result_positions[i][2] = moving_legs_angles[2];
+      result_positions[i][3] = standby_legs_angles[0];
+      result_positions[i][4] = standby_legs_angles[1];
+      result_positions[i][5] = standby_legs_angles[2];
+      result_positions[i][6] = standby_legs_angles[0];
+      result_positions[i][7] = standby_legs_angles[1];
+      result_positions[i][8] = standby_legs_angles[2];
+      result_positions[i][9] = moving_legs_angles[0];
+      result_positions[i][10] = moving_legs_angles[1];
+      result_positions[i][11] = moving_legs_angles[2];
+    }
+    else  {
+      result_positions[i][0] = standby_legs_angles[0];
+      result_positions[i][1] = standby_legs_angles[1];
+      result_positions[i][2] = standby_legs_angles[2];
+      result_positions[i][3] = moving_legs_angles[0];
+      result_positions[i][4] = moving_legs_angles[1];
+      result_positions[i][5] = moving_legs_angles[2];
+      result_positions[i][6] = moving_legs_angles[0];
+      result_positions[i][7] = moving_legs_angles[1];
+      result_positions[i][8] = moving_legs_angles[2];
+      result_positions[i][9] = standby_legs_angles[0];
+      result_positions[i][10] = standby_legs_angles[1];
+      result_positions[i][11] = standby_legs_angles[2];
+    }
   }
   return result_positions;
 }

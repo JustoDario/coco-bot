@@ -138,18 +138,18 @@ def generate_launch_description():
         )
     )
 
-    # RViz2
-    #rviz_config_file = PathJoinSubstitution(
-    #    [FindPackageShare(description_package), "rviz", "coco.rviz"]
-   # )
-   # rviz_node = Node(
-    #    package="rviz2",
-     #   executable="rviz2",
-      #  name="rviz2",
-       # output="log",
-       # arguments=["-d", rviz_config_file],
-      #  condition=IfCondition(launch_rviz),
-    #)
+    #RViz2
+    rviz_config_file = PathJoinSubstitution(
+        [FindPackageShare(description_package), "urdf", "coco.rviz"]
+    )
+    rviz_node = Node(
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
+        output="log",
+        arguments=["-d", rviz_config_file],
+        condition=IfCondition(launch_rviz),
+    )
 
     nodes = [
         controller_manager_node,
@@ -158,7 +158,7 @@ def generate_launch_description():
         joint_state_broadcaster_spawner,
         joint_trajectory_controller_spawner,
         delay_gait_planifier_after_joint_trajectory_controller_spawner,
-        #rviz_node,
+        rviz_node,
     ]
 
     return LaunchDescription(declared_arguments + nodes)
