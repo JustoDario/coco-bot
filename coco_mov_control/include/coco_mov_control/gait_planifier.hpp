@@ -66,6 +66,11 @@ private:
   int state_;
   bool action_finished_ {true};
   bool action_succeeded_ {true};
+  std::vector<std::array<float, 12>> default_forward_;
+  std::vector<std::array<float, 12>> default_backward_;
+  std::vector<std::array<float, 12>> default_left_;
+  std::vector<std::array<float, 12>> default_right_;
+  std::vector<std::array<float, 12>> default_standby_;
 
   std::vector<std::string> joint_names_;
   float curve_amplitude_; //future implementation

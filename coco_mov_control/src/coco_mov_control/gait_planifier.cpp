@@ -21,16 +21,33 @@ namespace
   //De momento para rpobar todos los gaits son hacia delante default
   std::vector<std::array<float, 3>> DEFAULT_FORWARD_GAIT = {
     {18.0, 155.0, 36.0},
-    {18.0, 120.0, 36.0},
-    {45.0, 120.0, 36.0},
-    {35.0, 155.0, 36.0}
+    {22.0, 110.0, 36.0},
+    {40.0, 110.0, 36.0},
+    {45.0, 155.0, 36.0}
   };
-  std::vector<std::array<float, 3>> DEFAULT_BACKWARD_GAIT ;
-  std::vector<std::array<float, 3>> DEFAULT_LEFT_GAIT ;
-  std::vector<std::array<float, 3>> DEFAULT_RIGHT_GAIT;
+  std::vector<std::array<float, 3>> DEFAULT_BACKWARD_GAIT = {
+    DEFAULT_FORWARD_GAIT[3],
+    DEFAULT_FORWARD_GAIT[2],
+    DEFAULT_FORWARD_GAIT[1],
+    DEFAULT_FORWARD_GAIT[0],
+  };
+  std::vector<std::array<float, 3>> DEFAULT_LEFT_GAIT = {
+    {18.0, 150.0, 36.0},
+    {18.0, 142.0, 27.0},
+    {18.0, 135.0, 21.0},
+    {18.0, 142.0, 15.0},
+    {18.0, 150.0, 6.0}
+  };
+  std::vector<std::array<float, 3>> DEFAULT_RIGHT_GAIT = {
+    {18.0, 150.0, 36.0},
+    {18.0, 142.0, 45.0},
+    {18.0, 135.0, 51.0},
+    {18.0, 142.0, 57.0},
+    {18.0, 150.0, 66.0}
+  };
   std::vector<std::array<float, 3>> DEFAULT_RIGHT_SPIN ;
   std::vector<std::array<float, 3>> DEFAULT_LEFT_SPIN;
-  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{18.0, 155.0, 36.0}}; 
+  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{18.0, 110.0, 36.0}}; 
 }
 namespace coco_mov_control
 {
@@ -60,6 +77,11 @@ GaitPlanifier::GaitPlanifier()
   standby_twist_.linear.x = 0.0;
   standby_twist_.linear.y = 0.0;
   standby_twist_.angular.z = 0.0;
+  default_forward_ = calculate_joint_positions(DEFAULT_FORWARD_GAIT);
+  default_backward_ = calculate_joint_positions(DEFAULT_BACKWARD_GAIT);
+  default_left_ = calculate_joint_positions(DEFAULT_LEFT_GAIT);
+  default_right_ = calculate_joint_positions(DEFAULT_RIGHT_GAIT);
+  default_standby_ = calculate_joint_positions(DEFAULT_STANDBY);
 
 }
 float
@@ -181,19 +203,19 @@ GaitPlanifier::get_joint_trajectory(const Twist & twist)
 
   if(twist.linear.x != 0 && twist.linear.y == 0 && twist.angular.z == 0) {
     if(twist.linear.x > 0) {
-      joint_positions = calculate_joint_positions(DEFAULT_FORWARD_GAIT);
+      joint_positions = default_forward_;
     }
     else {
-      joint_positions = calculate_joint_positions(DEFAULT_BACKWARD_GAIT);;
+      joint_positions = default_backward_;
     }
     movement_velocity = std::abs(twist.linear.x);
   }
   else if(twist.linear.x == 0 && twist.linear.y != 0 && twist.angular.z == 0) {
     if(twist.linear.y > 0) {
-      joint_positions = calculate_joint_positions(DEFAULT_LEFT_GAIT);
+      joint_positions = default_left_;
     }
     else {
-      joint_positions = calculate_joint_positions(DEFAULT_RIGHT_GAIT);
+      joint_positions = default_right_;
     }
     movement_velocity = std::abs(twist.linear.y);
   }
@@ -207,23 +229,23 @@ GaitPlanifier::get_joint_trajectory(const Twist & twist)
     movement_velocity = std::abs(twist.angular.z);
   }
   else if(twist.linear.x != 0 && twist.linear.y == 0 && twist.angular.z != 0) {
-    joint_positions = calculate_joint_positions(DEFAULT_STANDBY);
+    joint_positions = default_standby_;
     //Not yet supported but will in the future make a specific gait for this case
   }
   else if((twist.linear.x == 0 && twist.linear.y == 0 && twist.angular.z == 0)) {
-    joint_positions = calculate_joint_positions(DEFAULT_STANDBY);
+    joint_positions = default_standby_;
   }
   else if(twist.linear.x != 0 && twist.linear.y != 0 && twist.angular.z == 0) {
-    joint_positions = calculate_joint_positions(DEFAULT_STANDBY);
+    joint_positions = default_standby_;
     //Not yet supported but will in the future make a specific gait for this case
   }
   else {
     //Not supported
-    joint_positions = calculate_joint_positions(DEFAULT_STANDBY);
+    joint_positions = default_standby_;
   }
   ngait_points_ = joint_positions.size();
   //Aqui puedo quitar el if y hacer que este trozo de funcion valga para ambos casos?
-  if(joint_positions != calculate_joint_positions(DEFAULT_STANDBY)) {
+  if(joint_positions != default_standby_) {
     result_gait.points.resize(ngait_points_);
     step_time = get_step_time(joint_positions, movement_velocity);
     for (size_t i = 0; i < ngait_points_; i++) {
