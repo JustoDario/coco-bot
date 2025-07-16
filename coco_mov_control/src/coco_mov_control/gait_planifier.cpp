@@ -53,7 +53,7 @@ GaitPlanifier::GaitPlanifier()
   twist_sub_ = create_subscription<Twist>(
   "cmd_vel", 1, std::bind(&GaitPlanifier::twist_callback, this, _1));
   timer_ = this->create_wall_timer(
-    50ms, std::bind(&GaitPlanifier::control_cycle, this));
+    10ms, std::bind(&GaitPlanifier::control_cycle, this));
   joint_names_ = {"lf_coax_joint","lf_femur_joint","lf_tibia_joint",
                   "rf_coax_joint","rf_femur_joint","rf_tibia_joint",
                   "lb_coax_joint","lb_femur_joint","lb_tibia_joint",
