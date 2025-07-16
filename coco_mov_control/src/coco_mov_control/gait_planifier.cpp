@@ -20,19 +20,17 @@ namespace
   //En el hardware interface se ajustara eso
   //De momento para rpobar todos los gaits son hacia delante default
   std::vector<std::array<float, 3>> DEFAULT_FORWARD_GAIT = {
-    {-8.0, 140.0, 36.0},
-    {-8.0, 155.0, 36.0},
-    {-25.0, 155.0, 36.0},
-    {-25.0, 140.0, 36.0},
-    {-16.5, 140.0, 36.0},
-    {-19.5 ,140.0, 36.0}
+    {18.0, 155.0, 36.0},
+    {18.0, 120.0, 36.0},
+    {45.0, 120.0, 36.0},
+    {35.0, 155.0, 36.0}
   };
   std::vector<std::array<float, 3>> DEFAULT_BACKWARD_GAIT ;
   std::vector<std::array<float, 3>> DEFAULT_LEFT_GAIT ;
   std::vector<std::array<float, 3>> DEFAULT_RIGHT_GAIT;
   std::vector<std::array<float, 3>> DEFAULT_RIGHT_SPIN ;
   std::vector<std::array<float, 3>> DEFAULT_LEFT_SPIN;
-  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{-35.0, 140.0, 40.0}}; 
+  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{18.0, 155.0, 36.0}}; 
 }
 namespace coco_mov_control
 {
@@ -409,7 +407,6 @@ GaitPlanifier::control_cycle()
     case WALKING:
       // New twist and anterior has finished -> send current_twist trajectory
       RCLCPP_INFO(get_logger(), "Sending action");
-      current_trajectory_ = get_joint_trajectory(current_twist_);
       send_request(current_trajectory_);
       state_ = EXECUTING;
       break;
