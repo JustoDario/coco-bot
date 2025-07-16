@@ -43,7 +43,7 @@ hardware_interface::CallbackReturn Pca9685SystemHardware::on_init(
     
     for (auto i = 0u; i < 12; i++) {  // 12 servos
       double duty_cycle = command_to_duty_cycle(M_PI / 2.0 + servos_offsets_[i]);
-      duty_cycle = std::clamp(duty_cycle, 500.0, 2500.0);
+      duty_cycle = std::clamp(duty_cycle, 500.0, 2400.0);
       pca->set_pwm_ms(i, duty_cycle/1000.0);
     }
     
@@ -247,7 +247,6 @@ hardware_interface::return_type Pca9685SystemHardware::write(
 
     // Clamp duty cycle to safe range (0.5ms to 2.5ms)
     duty_cycle = std::clamp(duty_cycle, 500.0, 2300.0);
-    
     // RCLCPP_INFO(
     //     rclcpp::get_logger("Pca9685SystemHardware"),
     //     "Joint '%d' has command '%f', duty_cycle: '%f'.", i, hw_commands_[i], duty_cycle);
