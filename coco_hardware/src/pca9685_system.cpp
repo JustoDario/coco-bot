@@ -241,12 +241,12 @@ hardware_interface::return_type Pca9685SystemHardware::write(
       continue;
     }
 
-    //double duty_cycle = command_to_duty_cycle(hw_commands_[i] + servos_offsets_[i]);
-    double duty_cycle = command_to_duty_cycle(hw_commands_[i]);
+    double duty_cycle = command_to_duty_cycle(hw_commands_[i] + servos_offsets_[i]);
+    //double duty_cycle = command_to_duty_cycle(hw_commands_[i]);
 
 
     // Clamp duty cycle to safe range (0.5ms to 2.5ms)
-    duty_cycle = std::clamp(duty_cycle, 500.0, 2500.0);
+    duty_cycle = std::clamp(duty_cycle, 500.0, 2300.0);
     
     // RCLCPP_INFO(
     //     rclcpp::get_logger("Pca9685SystemHardware"),
