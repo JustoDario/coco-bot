@@ -159,7 +159,7 @@ def generate_launch_description():
 
     description_file = DeclareLaunchArgument(
         'description_file',
-        default_value=os.path.join(coco_pkg, 'urdf', 'coco.xacro'),
+        default_value=os.path.join(coco_pkg, 'urdf', 'coco.simulation.xacro'),
         description='Absolute path to the robot description file'
     )
 

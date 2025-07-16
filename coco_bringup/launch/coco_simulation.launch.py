@@ -27,6 +27,73 @@ from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
+from launch.substitutions import PathJoinSubstitution, Command, FindExecutable
+from launch.actions import RegisterEventHandler
+from launch.event_handlers import OnProcessExit
+from launch_ros.descriptions import ParameterValue
+
+# Obtén el URDF de simulación (el xacro que incluye el plugin de Gazebo)
+robot_description_content = Command([
+    PathJoinSubstitution([FindExecutable(name="xacro")]),
+    " ",
+    PathJoinSubstitution(
+        [FindPackageShare("coco_description"), "urdf", "coco.gazebo.xacro"]
+    ),
+])
+robot_description = {"robot_description": ParameterValue(robot_description_content, value_type=str)}
+
+controllers_file_path = PathJoinSubstitution(
+    [FindPackageShare("coco_bringup"), "config", "controllers.yaml"]
+)
+controllers_spawner_file_path = PathJoinSubstitution(
+    [FindPackageShare("coco_bringup"), "config", "controllers_spawner.yaml"]
+)
+
+#
+#controller_manager_node = Node(
+#    package="controller_manager",
+#    executable="ros2_control_node",
+#    parameters=[robot_description, controllers_file_path],
+#    output="both",
+#)
+#
+joint_state_broadcaster_spawner = Node(
+    package="controller_manager",
+    executable="spawner",
+    arguments=[
+        "joint_state_broadcaster",
+        "--controller-manager", "/controller_manager",
+        "--param-file", controllers_spawner_file_path
+    ],
+    output="screen",
+)
+
+joint_trajectory_controller_spawner = Node(
+    package="controller_manager",
+    executable="spawner",
+    arguments=[
+        "joint_trajectory_controller",
+        "--controller-manager", "/controller_manager",
+        "--param-file", controllers_spawner_file_path
+    ],
+    output="screen",
+)
+
+# (Opcional) Lanza el gait_planifier solo después de que el joint_trajectory_controller esté activo
+gait_planifier = Node(
+    package='coco_mov_control',
+    executable='gait_planifier',
+    name='gait_planifier',
+    output='screen',
+)
+
+delay_gait_planifier_after_joint_trajectory_controller_spawner = RegisterEventHandler(
+    event_handler=OnProcessExit(
+        target_action=joint_trajectory_controller_spawner,
+        on_exit=[gait_planifier],
+    )
+)
 
 
 def generate_launch_description():
@@ -63,14 +130,13 @@ def generate_launch_description():
     spawn_robot = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('coco_description'),
-            'launch/'), 'spawn.launch.py']),
-    )
-
-    gait_planifier = Node(
-        package='coco_mov_control',
-        executable='gait_planifier',
-        name='gait_planifier',
-        output='screen',
+            'launch/', 'spawn.launch.py')]),
+        launch_arguments={
+            'description_file': os.path.join(
+                get_package_share_directory('coco_description'),
+                'urdf', 'coco.gazebo.xacro'
+            )
+        }.items()
     )
 
     model_path = ''
@@ -91,6 +157,9 @@ def generate_launch_description():
     ld.add_action(gazebo_server)
     ld.add_action(gazebo_client)
     ld.add_action(spawn_robot)
-    ld.add_action(gait_planifier)
+    # ld.add_action(controller_manager_node)
+    ld.add_action(joint_state_broadcaster_spawner)
+    ld.add_action(joint_trajectory_controller_spawner)
+    ld.add_action(delay_gait_planifier_after_joint_trajectory_controller_spawner)
 
     return ld

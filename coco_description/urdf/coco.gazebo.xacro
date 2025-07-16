@@ -3,12 +3,12 @@
 
   <!-- Materiales -->
   <!-- Modelo principal (estructura, links, joints) -->
-  <xacro:include filename="$(find coco_description)/urdf/coco.xacro" />
+  <xacro:include filename="$(find coco_description)/urdf/coco.simulation.xacro" />
 
   <!-- ros2_control para simulación: usa el plugin de Gazebo, no el hardware real -->
   <ros2_control name="GazeboSystem" type="system">
     <hardware>
-      <plugin>gz_ros2_control::GazeboSimROS2ControlPlugin/GazeboSystem</plugin>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
     </hardware>
     <joint name="rf_coax_joint">
       <command_interface name="position"/>
@@ -60,11 +60,9 @@
     </joint>
   </ros2_control>
 
-  <!-- Plugin de Gazebo para ros2_control -->
   <gazebo>
-    <plugin name="gz_ros2_control::GazeboSimROS2ControlPlugin" filename="libgz_ros2_control-system.so">
-        <parameters>/home/justo/Escritorio/Workspaces/coco_ws/src/coco_bringup/config/controllers.yaml </parameters>
+    <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>$(find coco_bringup)/config/controllers.yaml</parameters>
     </plugin>
   </gazebo>
-
 </robot>

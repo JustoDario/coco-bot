@@ -1,0 +1,456 @@
+<?xml version="1.0" ?>
+<robot name="coco" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find coco_description)/urdf/materials.xacro" />
+
+<link name="base_link">
+  <inertial>
+    <origin xyz="0.01719416873843675 -0.010586956103026538 -0.030271020725176637" rpy="0 0 0"/>
+    <mass value="1.1592726862903535"/>
+    <inertia ixx="0.001525" iyy="0.004931" izz="0.005428" ixy="2.4e-05" iyz="-7.3e-05" ixz="0.000131"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="rear_link_1">
+  <inertial>
+    <origin xyz="-0.034918114367350164 0.0007461285796454375 0.005485059366080493" rpy="0 0 0"/>
+    <mass value="0.11479594943154815"/>
+    <inertia ixx="0.000174" iyy="0.000221" izz="0.000207" ixy="-0.0" iyz="0.0" ixz="4.7e-05"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.106086 0.004256 0.004897" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/rear_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.106086 0.004256 0.004897" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/rear_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="_front_link_1">
+  <inertial>
+    <origin xyz="0.028155859770594552 0.0002748583935074482 0.0015437264704093443" rpy="0 0 0"/>
+    <mass value="0.10341137221269066"/>
+    <inertia ixx="0.000133" iyy="0.000109" izz="0.000127" ixy="0.0" iyz="0.0" ixz="-2e-06"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.115911 0.004871 0.005051" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/_front_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.115911 0.004871 0.005051" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/_front_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="laser_link_1">
+  <inertial>
+    <origin xyz="8.838579649582401e-06 -0.0005477770066574924 -0.017396902560964038" rpy="0 0 0"/>
+    <mass value="0.10990695887765863"/>
+    <inertia ixx="3.7e-05" iyy="3.7e-05" izz="4.7e-05" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.025005 0.004393 0.060788" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/laser_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.025005 0.004393 0.060788" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/laser_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="rf_coax_link_1">
+  <inertial>
+    <origin xyz="-0.027369110162246246 -0.004767928904959445 -0.009790015228539686" rpy="0 0 0"/>
+    <mass value="0.0884976360458573"/>
+    <inertia ixx="2.6e-05" iyy="3.1e-05" izz="2.1e-05" ixy="-1e-06" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.17289 0.043844 -0.001027" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/rf_coax_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.17289 0.043844 -0.001027" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/rf_coax_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="lf_coax_link_1">
+  <inertial>
+    <origin xyz="-0.02736832625881655 0.004768593749374127 -0.009737944773185552" rpy="0 0 0"/>
+    <mass value="0.0884324940282"/>
+    <inertia ixx="2.6e-05" iyy="3.1e-05" izz="2.1e-05" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.172927 -0.034155 -0.001125" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/lf_coax_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.172927 -0.034155 -0.001125" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/lf_coax_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="rb_coax_link_1">
+  <inertial>
+    <origin xyz="-0.02737074559498745 -0.004816128460891356 -0.009784330590262647" rpy="0 0 0"/>
+    <mass value="0.08849756558311966"/>
+    <inertia ixx="2.6e-05" iyy="3.1e-05" izz="2.1e-05" ixy="-1e-06" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.106596 0.043339 -0.001713" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/rb_coax_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.106596 0.043339 -0.001713" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/rb_coax_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="lb_coax_link_1">
+  <inertial>
+    <origin xyz="-0.02736576332397661 0.00472931361840883 -0.009763230662882694" rpy="0 0 0"/>
+    <mass value="0.08843241963528373"/>
+    <inertia ixx="2.6e-05" iyy="3.1e-05" izz="2.1e-05" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.106596 -0.034661 -0.001613" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/lb_coax_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.106596 -0.034661 -0.001613" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/lb_coax_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="lb_femur_link_1">
+  <inertial>
+    <origin xyz="-0.04159478914261455 0.033027045783123675 0.0021016512248570787" rpy="0 0 0"/>
+    <mass value="0.1909714381661718"/>
+    <inertia ixx="6.2e-05" iyy="0.000282" izz="0.000317" ixy="1.8e-05" iyz="-0.0" ixz="1.9e-05"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.1351 -0.057832 0.008048" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/lb_femur_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.1351 -0.057832 0.008048" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/lb_femur_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="lf_femur_link_1">
+  <inertial>
+    <origin xyz="-0.04162948158977843 0.03304308687232135 0.0021804149880840333" rpy="0 0 0"/>
+    <mass value="0.1909714365177458"/>
+    <inertia ixx="6.2e-05" iyy="0.000282" izz="0.000318" ixy="1.8e-05" iyz="-0.0" ixz="1.9e-05"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.144429 -0.057368 0.008461" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/lf_femur_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.144429 -0.057368 0.008461" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/lf_femur_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="rf_femur_link_1">
+  <inertial>
+    <origin xyz="-0.041468789547334545 -0.03299229667627736 0.002126291600336283" rpy="0 0 0"/>
+    <mass value="0.19092987382506607"/>
+    <inertia ixx="6.2e-05" iyy="0.000282" izz="0.000317" ixy="-1.7e-05" iyz="0.0" ixz="1.9e-05"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.144371 0.06713 0.008743" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/rf_femur_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.144371 0.06713 0.008743" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/rf_femur_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="rb_femur_link_1">
+  <inertial>
+    <origin xyz="-0.04271911608770684 -0.03626187021884443 0.0014400330097334114" rpy="0 0 0"/>
+    <mass value="0.24958712980886347"/>
+    <inertia ixx="7.5e-05" iyy="0.000319" izz="0.000359" ixy="-2.1e-05" iyz="-1e-06" ixz="2.5e-05"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.135108 0.066677 0.007984" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/rb_femur_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.135108 0.066677 0.007984" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/rb_femur_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="lb_tibia_link_1">
+  <inertial>
+    <origin xyz="-0.03196384904823907 0.027725556247434155 0.003859745760892816" rpy="0 0 0"/>
+    <mass value="0.10314122455204974"/>
+    <inertia ixx="1.8e-05" iyy="0.000196" izz="0.0002" ixy="-0.0" iyz="-1e-06" ixz="1.3e-05"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.242628 -0.063618 0.010796" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/lb_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.242628 -0.063618 0.010796" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/lb_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="lf_tibia_link_1">
+  <inertial>
+    <origin xyz="-0.031976714332929285 0.02772553703112078 0.0037573349954613177" rpy="0 0 0"/>
+    <mass value="0.10314122455337109"/>
+    <inertia ixx="1.8e-05" iyy="0.000196" izz="0.0002" ixy="-0.0" iyz="-1e-06" ixz="1.3e-05"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.036894 -0.063154 0.0109" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/lf_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.036894 -0.063154 0.0109" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/lf_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="rf_tibia_link_1">
+  <inertial>
+    <origin xyz="-0.031502492319461874 -0.02779102082383947 0.0062624864037398" rpy="0 0 0"/>
+    <mass value="0.10311453435844117"/>
+    <inertia ixx="2.1e-05" iyy="0.000196" izz="0.000197" ixy="-0.0" iyz="1e-06" ixz="2.7e-05"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.036961 0.072914 0.011343" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/rf_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.036961 0.072914 0.011343" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/rf_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="rb_tibia_link_1">
+  <inertial>
+    <origin xyz="-0.03144126301711331 -0.027792497170823674 0.0063870183770951576" rpy="0 0 0"/>
+    <mass value="0.10311453435963047"/>
+    <inertia ixx="2.1e-05" iyy="0.000195" izz="0.000196" ixy="-0.0" iyz="1e-06" ixz="2.8e-05"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.242508 0.072461 0.010989" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/rb_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.242508 0.072461 0.010989" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find coco_description)/meshes/rb_tibia_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<joint name="base_link_to_rear_joint" type="fixed">
+  <origin xyz="-0.106086 -0.004256 -0.004897" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="rear_link_1"/>
+</joint>
+
+<joint name="base_link_to_front_joint" type="fixed">
+  <origin xyz="0.115911 -0.004871 -0.005051" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="_front_link_1"/>
+</joint>
+
+<joint name="base_link_to_lidar_joint" type="fixed">
+  <origin xyz="-0.025005 -0.004393 -0.060788" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="laser_link_1"/>
+</joint>
+
+<joint name="rf_coax_joint" type="revolute">
+  <origin xyz="0.056979 -0.038973 0.006078" rpy="0 0 0"/>
+  <parent link="_front_link_1"/>
+  <child link="rf_coax_link_1"/>
+  <axis xyz="-1.0 0.000465 0.000465"/>
+  <limit upper="0.349066" lower="-1.22173" effort="100" velocity="100"/>
+</joint>
+
+<joint name="lf_coax_joint" type="revolute">
+  <origin xyz="0.057016 0.039026 0.006176" rpy="0 0 0"/>
+  <parent link="_front_link_1"/>
+  <child link="lf_coax_link_1"/>
+  <axis xyz="-1.0 0.000465 0.000465"/>
+  <limit upper="1.22173" lower="-0.610865" effort="100" velocity="100"/>
+</joint>
+
+<joint name="rb_coax_joint" type="revolute">
+  <origin xyz="-0.00051 -0.039083 0.00661" rpy="0 0 0"/>
+  <parent link="rear_link_1"/>
+  <child link="rb_coax_link_1"/>
+  <axis xyz="-1.0 0.0 0.0"/>
+  <limit upper="0.610865" lower="-1.22173" effort="100" velocity="100"/>
+</joint>
+
+<joint name="lb_coax_joint" type="revolute">
+  <origin xyz="-0.00051 0.038917 0.00651" rpy="0 0 0"/>
+  <parent link="rear_link_1"/>
+  <child link="lb_coax_link_1"/>
+  <axis xyz="-1.0 0.0 0.0"/>
+  <limit upper="1.22173" lower="-0.610865" effort="100" velocity="100"/>
+</joint>
+
+<joint name="lb_femur_joint" type="revolute">
+  <origin xyz="-0.028504 0.023171 -0.009661" rpy="0 0 0"/>
+  <parent link="lb_coax_link_1"/>
+  <child link="lb_femur_link_1"/>
+  <axis xyz="-0.0 1.0 0.0"/>
+  <limit upper="0.0" lower="-3.141593" effort="100" velocity="100"/>
+</joint>
+
+<joint name="lf_femur_joint" type="revolute">
+  <origin xyz="-0.028498 0.023213 -0.009586" rpy="0 0 0"/>
+  <parent link="lf_coax_link_1"/>
+  <child link="lf_femur_link_1"/>
+  <axis xyz="0.0 1.0 0.0"/>
+  <limit upper="0.0" lower="-3.141593" effort="100" velocity="100"/>
+</joint>
+
+<joint name="rf_femur_joint" type="revolute">
+  <origin xyz="-0.028519 -0.023286 -0.00977" rpy="0 0 0"/>
+  <parent link="rf_coax_link_1"/>
+  <child link="rf_femur_link_1"/>
+  <axis xyz="-0.0 -1.0 -0.0"/>
+  <limit upper="3.141593" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+<joint name="rb_femur_joint" type="revolute">
+  <origin xyz="-0.028512 -0.023338 -0.009697" rpy="0 0 0"/>
+  <parent link="rb_coax_link_1"/>
+  <child link="rb_femur_link_1"/>
+  <axis xyz="0.0 -1.0 0.0"/>
+  <limit upper="3.141593" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+<joint name="lb_tibia_joint" type="revolute">
+  <origin xyz="-0.107528 0.005786 -0.002748" rpy="0 0 0"/>
+  <parent link="lb_femur_link_1"/>
+  <child link="lb_tibia_link_1"/>
+  <axis xyz="-0.0 1.0 -0.0"/>
+  <limit upper="0.0" lower="-2.617994" effort="100" velocity="100"/>
+</joint>
+
+<joint name="lf_tibia_joint" type="revolute">
+  <origin xyz="-0.107535 0.005786 -0.002439" rpy="0 0 0"/>
+  <parent link="lf_femur_link_1"/>
+  <child link="lf_tibia_link_1"/>
+  <axis xyz="-0.0 1.0 0.0"/>
+  <limit upper="0.0" lower="-2.617994" effort="100" velocity="100"/>
+</joint>
+
+<joint name="rf_tibia_joint" type="revolute">
+  <origin xyz="-0.10741 -0.005784 -0.0026" rpy="0 0 0"/>
+  <parent link="rf_femur_link_1"/>
+  <child link="rf_tibia_link_1"/>
+  <axis xyz="0.001207 -0.999999 -6.6e-05"/>
+  <limit upper="2.617994" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+<joint name="rb_tibia_joint" type="revolute">
+  <origin xyz="-0.1074 -0.005784 -0.003005" rpy="0 0 0"/>
+  <parent link="rb_femur_link_1"/>
+  <child link="rb_tibia_link_1"/>
+  <axis xyz="0.001208 -0.999999 -6.1e-05"/>
+  <limit upper="2.617994" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+</robot>
