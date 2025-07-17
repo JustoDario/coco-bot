@@ -16,14 +16,14 @@
 #include "trajectory_msgs/msg/joint_trajectory.hpp"
 
 namespace
-{ //Falta revisar si para los servos que estan en posicion contraria el angulo se invierte
-  //En el hardware interface se ajustara eso
-  //De momento para rpobar todos los gaits son hacia delante default
+{
   std::vector<std::array<float, 3>> DEFAULT_FORWARD_GAIT = {
-    {18.0, 155.0, 36.0},
-    {22.0, 110.0, 36.0},
-    {40.0, 110.0, 36.0},
-    {45.0, 155.0, 36.0}
+    {7, 160.0, 40.0},
+    {7, 180.0, 40.0},
+    {42, 180.0, 40.0},
+    {42.0, 160.0, 40.0},
+    {7.0, 160.0, 40.0}
+
   };
   std::vector<std::array<float, 3>> DEFAULT_BACKWARD_GAIT = {
     DEFAULT_FORWARD_GAIT[3],
@@ -48,7 +48,7 @@ namespace
   };
   std::vector<std::array<float, 3>> DEFAULT_RIGHT_SPIN ;
   std::vector<std::array<float, 3>> DEFAULT_LEFT_SPIN;
-  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{18.0, 110.0, 36.0}}; 
+  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{7.0, 160.0, 40.0}}; 
 }
 namespace coco_mov_control
 {
@@ -129,7 +129,7 @@ GaitPlanifier::get_leg_angles(const std::array<float, 3>& foot_goal_position)
   float tibia_rad = std::acos(arg_acos_tibia);
 
   // Calculate femur angle
-  float arg_raiz_femur1 = (z * z + y * y) - 1600.0f;
+  float arg_raiz_femur1 = ((z * z + y * y) - 1600.0f);
   float parte1_femur = std::atan(x / std::sqrt(arg_raiz_femur1));
 
   float arg_raiz_femur2 = arg_raiz_femur1 + x * x;

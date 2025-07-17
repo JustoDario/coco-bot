@@ -191,16 +191,16 @@ void Pca9685SystemHardware::transform_angles(std::vector<double>& hw_commands){
   /*Since in your robot built you might need each leg to be rotated 60 degrees for example
    but all servo orientations may not be the same so here you can apply rectifications for each servo*/
   // In order of joint_names
-  hw_commands[0] = hw_commands[0];  //lf_coax
+  hw_commands[0] = M_PI - hw_commands[0];  //lf_coax
   hw_commands[1] = M_PI - hw_commands[1];  //lf_femur
   hw_commands[2] = M_PI - hw_commands[2];  //lf_tibia
   hw_commands[3] = M_PI - hw_commands[3];  //rf_coax
   hw_commands[4] = hw_commands[4];  //rf_femur
   hw_commands[5] = hw_commands[5];  //rf_tibia
-  hw_commands[6] = hw_commands[6];  //lb_coax
+  hw_commands[6] = M_PI - hw_commands[6];  //lb_coax
   hw_commands[7] = M_PI - hw_commands[7];  //lb_femur
   hw_commands[8] = M_PI - hw_commands[8];  //lb_tibia
-  hw_commands[9] = M_PI - hw_commands[9];  //rb_coax
+  hw_commands[9] =  M_PI - hw_commands[9];  //rb_coax
   hw_commands[10] = hw_commands[10];  //rb_femur
   hw_commands[11] = hw_commands[11];  //rb_tibia
 }
