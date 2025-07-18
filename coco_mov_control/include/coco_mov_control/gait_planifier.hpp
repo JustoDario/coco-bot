@@ -49,6 +49,9 @@ protected:
 private:
   std::array<float, 3> get_leg_angles(const std::array<float, 3>& foot_goal_position);
   std::vector<std::array<float, 12>> calculate_joint_positions(const std::vector<std::array<float, 3>>& gait_points_per_leg);
+  std::vector<std::array<float, 12>> spin_joint_positions(const std::vector<std::array<float, 3>>& gait_right_legs, const std::vector<std::array<float, 3>>& gait_left_legs);
+  std::vector<std::array<float, 12>> curve_joint_positions();  
+
   void twist_callback(const Twist::ConstSharedPtr & twist);
   void control_cycle();
   JointTrajectory get_joint_trajectory(const Twist & twist);
@@ -71,6 +74,9 @@ private:
   std::vector<std::array<float, 12>> default_left_;
   std::vector<std::array<float, 12>> default_right_;
   std::vector<std::array<float, 12>> default_standby_;
+  std::vector<std::array<float, 12>> default_right_spin_;
+  std::vector<std::array<float, 12>> default_left_spin_;
+
 
   std::vector<std::string> joint_names_;
   float curve_amplitude_; //future implementation

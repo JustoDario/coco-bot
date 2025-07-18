@@ -80,6 +80,10 @@ GaitPlanifier::GaitPlanifier()
   default_left_ = calculate_joint_positions(DEFAULT_LEFT_GAIT);
   default_right_ = calculate_joint_positions(DEFAULT_RIGHT_GAIT);
   default_standby_ = calculate_joint_positions(DEFAULT_STANDBY);
+  default_right_spin_ = spin_joint_positions(DEFAULT_RIGHT_GAIT, DEFAULT_LEFT_GAIT);
+  default_left_spin_ = spin_joint_positions(DEFAULT_LEFT_GAIT, DEFAULT_RIGHT_GAIT);
+
+
 
 }
 float
@@ -137,6 +141,54 @@ GaitPlanifier::get_leg_angles(const std::array<float, 3>& foot_goal_position)
 
   return { coxa_rad, femur_rad, tibia_rad };
 
+}
+std::vector<std::array<float, 12>>
+GaitPlanifier::spin_joint_positions(const std::vector<std::array<float, 3>>& gait_right_legs, const std::vector<std::array<float, 3>>& gait_left_legs)
+{
+  //Both gaits must be same length
+  size_t n_steps = gait_right_legs.size();
+  std::vector<std::array<float, 12>> result_positions;
+  result_positions.resize(n_steps*2);
+  int j = 0;
+  for(size_t i = 0; i < n_steps*2; i++)
+  {
+    if(j >= n_steps) {
+      j = 0;
+    }
+    std::array<float, 3> right_legs_angles = get_leg_angles(gait_right_legs[j]);
+    std::array<float, 3> left_legs_angles = get_leg_angles(gait_left_legs[j]);
+    std::array<float, 3> standby_legs_angles = get_leg_angles(DEFAULT_STANDBY[0]);
+    if(i < n_steps){
+      result_positions[i][0] = standby_legs_angles[0];
+      result_positions[i][1] = standby_legs_angles[1];
+      result_positions[i][2] = standby_legs_angles[2];
+      result_positions[i][3] = right_legs_angles[0];
+      result_positions[i][4] = right_legs_angles[1];
+      result_positions[i][5] = right_legs_angles[2];
+      result_positions[i][6] = left_legs_angles[0];
+      result_positions[i][7] = left_legs_angles[1];
+      result_positions[i][8] = left_legs_angles[2];
+      result_positions[i][9] = standby_legs_angles[0];
+      result_positions[i][10] = standby_legs_angles[1];
+      result_positions[i][11] = standby_legs_angles[2];
+    }
+    else  {
+      result_positions[i][0] = right_legs_angles[0];
+      result_positions[i][1] = right_legs_angles[1];
+      result_positions[i][2] = right_legs_angles[2];
+      result_positions[i][3] = standby_legs_angles[0];
+      result_positions[i][4] = standby_legs_angles[1];
+      result_positions[i][5] = standby_legs_angles[2];
+      result_positions[i][6] = standby_legs_angles[0];
+      result_positions[i][7] = standby_legs_angles[1];
+      result_positions[i][8] = standby_legs_angles[2];
+      result_positions[i][9] = left_legs_angles[0];
+      result_positions[i][10] = left_legs_angles[1];
+      result_positions[i][11] = left_legs_angles[2];
+    }
+    j++;
+  }
+  return result_positions;
 }
 std::vector<std::array<float, 12>>
 GaitPlanifier::calculate_joint_positions(const std::vector<std::array<float, 3>>& gait_steps_per_leg)
