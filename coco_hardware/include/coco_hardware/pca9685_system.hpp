@@ -69,15 +69,15 @@ private:
   std::vector<double> hw_commands_;
   std::vector<double> hw_states_;
   std::vector<double> servos_offsets_ = {
-  15*M_PI/180,
+  11*M_PI/180,
   5*M_PI/180 ,
-  2*M_PI/180 ,
-  M_PI/9 ,
+  4*M_PI/180 ,
+  14*M_PI/180 ,
   M_PI/18 ,
   -2*M_PI/180 ,
   M_PI/6 ,
   12*M_PI/180 ,
-  -7*M_PI/180 ,
+  -1*M_PI/180 ,
   10*M_PI/180,
   M_PI/36 ,
   -10*M_PI/180

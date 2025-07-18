@@ -18,10 +18,10 @@
 namespace
 {
   std::vector<std::array<float, 3>> DEFAULT_FORWARD_GAIT = {
-    {7, 175.0, 40.0},
-    {7, 190.0, 40.0},
-    {42, 190.0, 40.0},
-    {42.0, 175.0, 40.0}
+    {10, 165.0, 40.0},
+    {10, 195.0, 40.0},
+    {55, 195.0, 40.0},
+    {55, 165.0, 40.0}
   };
   std::vector<std::array<float, 3>> DEFAULT_BACKWARD_GAIT = {
     DEFAULT_FORWARD_GAIT[3],
@@ -30,23 +30,22 @@ namespace
     DEFAULT_FORWARD_GAIT[0],
   };
   std::vector<std::array<float, 3>> DEFAULT_LEFT_GAIT = {
-    {18.0, 150.0, 36.0},
-    {18.0, 142.0, 27.0},
-    {18.0, 135.0, 21.0},
-    {18.0, 142.0, 15.0},
-    {18.0, 150.0, 6.0},
-    {18.0, 150.0, 36.0}
+    {10.0, 177.0, 40.0},
+    {10.0, 186.0, 52.5},
+    {10.0, 195.0, 60.0},
+    {10.0, 186.0, 67.5},
+    {10.0, 177.0, 80.0}
   };
   std::vector<std::array<float, 3>> DEFAULT_RIGHT_GAIT = {
-    {18.0, 150.0, 36.0},
-    {18.0, 142.0, 45.0},
-    {18.0, 135.0, 51.0},
-    {18.0, 142.0, 57.0},
-    {18.0, 150.0, 66.0}
+    {10.0, 165.0, 50.0},
+    {10.0, 183.0, 37.5},
+    {10.0, 190.0, 30.0},
+    {10.0, 183.0, 22.5},
+    {10.0, 165.0, 10.0}
   };
   std::vector<std::array<float, 3>> DEFAULT_RIGHT_SPIN ;
   std::vector<std::array<float, 3>> DEFAULT_LEFT_SPIN;
-  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{7.0, 175.0, 40.0}}; 
+  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{10.0, 165.0, 40.0}}; 
 }
 namespace coco_mov_control
 {
