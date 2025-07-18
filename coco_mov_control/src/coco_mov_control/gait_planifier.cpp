@@ -146,15 +146,19 @@ GaitPlanifier::calculate_joint_positions(const std::vector<std::array<float, 3>>
 {
   size_t n_steps = gait_steps_per_leg.size();
   std::vector<std::array<float, 12>> result_positions;
-  result_positions.resize(n_steps);
+  result_positions.resize(n_steps*2);
+  int j = 0;
   /* for each step, legs are ordered front left, front right, back left, back right
   and right now only gait_type supported is intercalated (first 2 opossing legs,then the other 2);
   */ 
-  for(size_t i = 0; i < n_steps; i++)
+  for(size_t i = 0; i < n_steps*2; i++)
   {
-    std::array<float, 3> moving_legs_angles = get_leg_angles(gait_steps_per_leg[i]);
+    if(j >= n_steps) {
+      j = 0;
+    }
+    std::array<float, 3> moving_legs_angles = get_leg_angles(gait_steps_per_leg[j]);
     std::array<float, 3> standby_legs_angles = get_leg_angles(DEFAULT_STANDBY[0]);
-    if(i%2 == 0){
+    if(i < n_steps){
       result_positions[i][0] = moving_legs_angles[0];
       result_positions[i][1] = moving_legs_angles[1];
       result_positions[i][2] = moving_legs_angles[2];
@@ -182,6 +186,7 @@ GaitPlanifier::calculate_joint_positions(const std::vector<std::array<float, 3>>
       result_positions[i][10] = standby_legs_angles[1];
       result_positions[i][11] = standby_legs_angles[2];
     }
+    j++;
   }
   return result_positions;
 }
