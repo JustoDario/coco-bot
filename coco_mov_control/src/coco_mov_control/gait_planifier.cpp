@@ -18,12 +18,10 @@
 namespace
 {
   std::vector<std::array<float, 3>> DEFAULT_FORWARD_GAIT = {
-    {7, 160.0, 40.0},
-    {7, 180.0, 40.0},
-    {42, 180.0, 40.0},
-    {42.0, 160.0, 40.0},
-    {7.0, 160.0, 40.0}
-
+    {7, 175.0, 40.0},
+    {7, 190.0, 40.0},
+    {42, 190.0, 40.0},
+    {42.0, 175.0, 40.0}
   };
   std::vector<std::array<float, 3>> DEFAULT_BACKWARD_GAIT = {
     DEFAULT_FORWARD_GAIT[3],
@@ -48,7 +46,7 @@ namespace
   };
   std::vector<std::array<float, 3>> DEFAULT_RIGHT_SPIN ;
   std::vector<std::array<float, 3>> DEFAULT_LEFT_SPIN;
-  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{7.0, 160.0, 40.0}}; 
+  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{7.0, 175.0, 40.0}}; 
 }
 namespace coco_mov_control
 {
@@ -271,7 +269,7 @@ GaitPlanifier::get_joint_trajectory(const Twist & twist)
       result_gait.points[0].positions[i] = joint_positions[0][i];
     }
     result_gait.points[0].time_from_start.sec = 0;
-    result_gait.points[0].time_from_start.nanosec = 125000000;
+    result_gait.points[0].time_from_start.nanosec = 55000000;
   }
 
   return result_gait;
