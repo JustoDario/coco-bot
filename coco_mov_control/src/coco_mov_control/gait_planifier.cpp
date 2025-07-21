@@ -74,7 +74,6 @@ GaitPlanifier::GaitPlanifier()
   standby_twist_.linear.x = 0.0;
   standby_twist_.linear.y = 0.0;
   standby_twist_.angular.z = 0.0;
-  current_trajectory_ = get_joint_trajectory(standby_twist_);
   default_forward_ = calculate_joint_positions(DEFAULT_FORWARD_GAIT);
   default_backward_ = calculate_joint_positions(DEFAULT_BACKWARD_GAIT);
   default_left_ = calculate_joint_positions(DEFAULT_LEFT_GAIT);
@@ -82,9 +81,7 @@ GaitPlanifier::GaitPlanifier()
   default_standby_ = calculate_joint_positions(DEFAULT_STANDBY);
   default_right_spin_ = spin_joint_positions(DEFAULT_RIGHT_GAIT, DEFAULT_LEFT_GAIT, true);
   default_left_spin_ = spin_joint_positions(DEFAULT_LEFT_GAIT, DEFAULT_RIGHT_GAIT, false);
-
-
-
+  current_trajectory_ = get_joint_trajectory(standby_twist_);
 }
 float
 GaitPlanifier::get_step_time(std::vector<std::array<float, 12>> trajectory_points, float vel)
