@@ -49,7 +49,7 @@ protected:
 private:
   std::array<float, 3> get_leg_angles(const std::array<float, 3>& foot_goal_position);
   std::vector<std::array<float, 12>> calculate_joint_positions(const std::vector<std::array<float, 3>>& gait_points_per_leg);
-  std::vector<std::array<float, 12>> spin_joint_positions(const std::vector<std::array<float, 3>>& gait_right_legs, const std::vector<std::array<float, 3>>& gait_left_legs);
+  std::vector<std::array<float, 12>> spin_joint_positions(const std::vector<std::array<float, 3>>& gait_right_legs, const std::vector<std::array<float, 3>>& gait_left_legs, bool right_spin);
   std::vector<std::array<float, 12>> curve_joint_positions();  
 
   void twist_callback(const Twist::ConstSharedPtr & twist);
@@ -61,7 +61,7 @@ private:
   const float max_vel_ = 0.4;
   const float std_vel_ = 0.25;
   const float min_vel_ = 0.15;
-  const float std_real_step_time = 0.8;//secs
+  const float std_real_step_time = 1.2;//secs
 
   static const int STANDBY = 0;
   static const int WALKING = 1;
@@ -76,7 +76,12 @@ private:
   std::vector<std::array<float, 12>> default_standby_;
   std::vector<std::array<float, 12>> default_right_spin_;
   std::vector<std::array<float, 12>> default_left_spin_;
+  std::vector<std::array<float, 12>> sit_;
 
+
+//Emotes
+  std::vector<std::array<float, 12>> stretch_;
+  std::vector<std::array<float, 12>> jump_;
 
   std::vector<std::string> joint_names_;
   float curve_amplitude_; //future implementation
