@@ -8,7 +8,7 @@
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// WITHOUTRRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #include <cmath>
@@ -18,34 +18,34 @@
 namespace
 {
   std::vector<std::array<float, 3>> DEFAULT_FORWARD_GAIT = {
-    {10, 165.0, 40.0},
-    {10, 195.0, 40.0},
-    {55, 195.0, 40.0},
-    {55, 165.0, 40.0}
+    {6, 145.0, 40.0},
+    {6, 175.0, 40.0},
+    {55, 175.0, 40.0},
+    {55, 145.0, 40.0}
   };
   std::vector<std::array<float, 3>> DEFAULT_BACKWARD_GAIT = {
-    DEFAULT_FORWARD_GAIT[3],
-    DEFAULT_FORWARD_GAIT[2],
-    DEFAULT_FORWARD_GAIT[1],
-    DEFAULT_FORWARD_GAIT[0],
+    {35, 145.0, 40.0},
+    {35, 175.0, 40.0},
+    {-10, 175.0, 40.0},
+    {-10, 145.0, 40.0}
   };
   std::vector<std::array<float, 3>> DEFAULT_LEFT_GAIT = {
-    {10.0, 177.0, 40.0},
-    {10.0, 186.0, 52.5},
-    {10.0, 195.0, 60.0},
-    {10.0, 186.0, 67.5},
-    {10.0, 177.0, 80.0}
+    {6.0, 145.0, 40.0},
+    {6.0, 163.0, 52.5},
+    {6.0, 170.0, 60.0},
+    {6.0, 163.0, 67.5},
+    {6.0, 145.0, 80.0}
   };
   std::vector<std::array<float, 3>> DEFAULT_RIGHT_GAIT = {
-    {10.0, 165.0, 50.0},
-    {10.0, 183.0, 37.5},
-    {10.0, 190.0, 30.0},
-    {10.0, 183.0, 22.5},
-    {10.0, 165.0, 10.0}
+    {6.0, 145.0, 50.0},
+    {6.0, 163.0, 37.5},
+    {6.0, 170.0, 30.0},
+    {6.0, 163.0, 22.5},
+    {6.0, 145.0, 10.0}
   };
   std::vector<std::array<float, 3>> DEFAULT_RIGHT_SPIN ;
   std::vector<std::array<float, 3>> DEFAULT_LEFT_SPIN;
-  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{10.0, 165.0, 40.0}}; 
+  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{6.0, 145.0, 40.0}}; 
 }
 namespace coco_mov_control
 {
@@ -276,10 +276,10 @@ GaitPlanifier::get_joint_trajectory(const Twist & twist)
   }
   else if(twist.linear.x == 0 && twist.linear.y == 0 && twist.angular.z != 0) {
     if(twist.angular.z > 0) {
-      joint_positions = calculate_joint_positions(DEFAULT_LEFT_SPIN);
+      joint_positions = default_left_spin_;
     }
     else {
-      joint_positions = calculate_joint_positions(DEFAULT_RIGHT_SPIN);;
+      joint_positions = default_right_spin_;
     }
     movement_velocity = std::abs(twist.angular.z);
   }
