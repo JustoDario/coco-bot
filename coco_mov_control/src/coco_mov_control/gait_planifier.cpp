@@ -43,9 +43,7 @@ namespace
     {6.0, 163.0, 22.5},
     {6.0, 145.0, 10.0}
   };
-  std::vector<std::array<float, 3>> DEFAULT_RIGHT_SPIN ;
-  std::vector<std::array<float, 3>> DEFAULT_LEFT_SPIN;
-  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{6.0, 145.0, 40.0}}; 
+  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{6.0, 145.0, 40.0}};
 }
 namespace coco_mov_control
 {
@@ -72,16 +70,18 @@ GaitPlanifier::GaitPlanifier()
                   "lb_coax_joint","lb_femur_joint","lb_tibia_joint",
                   "rb_coax_joint","rb_femur_joint","rb_tibia_joint"};
   state_ = STANDBY;
+  last_twist_ = system_clock_.now();
   standby_twist_.linear.x = 0.0;
   standby_twist_.linear.y = 0.0;
   standby_twist_.angular.z = 0.0;
+  current_trajectory_ = get_joint_trajectory(standby_twist_);
   default_forward_ = calculate_joint_positions(DEFAULT_FORWARD_GAIT);
   default_backward_ = calculate_joint_positions(DEFAULT_BACKWARD_GAIT);
   default_left_ = calculate_joint_positions(DEFAULT_LEFT_GAIT);
   default_right_ = calculate_joint_positions(DEFAULT_RIGHT_GAIT);
   default_standby_ = calculate_joint_positions(DEFAULT_STANDBY);
-  default_right_spin_ = spin_joint_positions(DEFAULT_RIGHT_GAIT, DEFAULT_LEFT_GAIT);
-  default_left_spin_ = spin_joint_positions(DEFAULT_LEFT_GAIT, DEFAULT_RIGHT_GAIT);
+  default_right_spin_ = spin_joint_positions(DEFAULT_RIGHT_GAIT, DEFAULT_LEFT_GAIT, true);
+  default_left_spin_ = spin_joint_positions(DEFAULT_LEFT_GAIT, DEFAULT_RIGHT_GAIT, false);
 
 
 
@@ -143,48 +143,84 @@ GaitPlanifier::get_leg_angles(const std::array<float, 3>& foot_goal_position)
 
 }
 std::vector<std::array<float, 12>>
-GaitPlanifier::spin_joint_positions(const std::vector<std::array<float, 3>>& gait_right_legs, const std::vector<std::array<float, 3>>& gait_left_legs)
+GaitPlanifier::spin_joint_positions(const std::vector<std::array<float, 3>>& gait_front_legs, const std::vector<std::array<float, 3>>& gait_rear_legs,bool right_spin)
 {
-  //Both gaits must be same length
-  size_t n_steps = gait_right_legs.size();
+  /*Both gaits must be same length
+    The spin will take the direction of the front legs gait
+  */
+  size_t n_steps = gait_front_legs.size()*2;
   std::vector<std::array<float, 12>> result_positions;
-  result_positions.resize(n_steps*2);
-  int j = 0;
-  for(size_t i = 0; i < n_steps*2; i++)
+  result_positions.resize(n_steps);
+  size_t j = 0;
+  for(size_t i = 0; i < n_steps; i++)
   {
-    if(j >= n_steps) {
+    if(j >= n_steps/2) {
       j = 0;
     }
-    std::array<float, 3> right_legs_angles = get_leg_angles(gait_right_legs[j]);
-    std::array<float, 3> left_legs_angles = get_leg_angles(gait_left_legs[j]);
+    
+    std::array<float, 3> front_legs_angles = get_leg_angles(gait_front_legs[j]);
+    std::array<float, 3> rear_legs_angles = get_leg_angles(gait_rear_legs[j]);
+
     std::array<float, 3> standby_legs_angles = get_leg_angles(DEFAULT_STANDBY[0]);
-    if(i < n_steps){
-      result_positions[i][0] = standby_legs_angles[0];
-      result_positions[i][1] = standby_legs_angles[1];
-      result_positions[i][2] = standby_legs_angles[2];
-      result_positions[i][3] = right_legs_angles[0];
-      result_positions[i][4] = right_legs_angles[1];
-      result_positions[i][5] = right_legs_angles[2];
-      result_positions[i][6] = left_legs_angles[0];
-      result_positions[i][7] = left_legs_angles[1];
-      result_positions[i][8] = left_legs_angles[2];
-      result_positions[i][9] = standby_legs_angles[0];
-      result_positions[i][10] = standby_legs_angles[1];
-      result_positions[i][11] = standby_legs_angles[2];
+    if(right_spin){
+      if(i < n_steps/2){
+        result_positions[i][0] = standby_legs_angles[0];
+        result_positions[i][1] = standby_legs_angles[1];
+        result_positions[i][2] = standby_legs_angles[2];
+        result_positions[i][3] = front_legs_angles[0];
+        result_positions[i][4] = front_legs_angles[1];
+        result_positions[i][5] = front_legs_angles[2];
+        result_positions[i][6] = rear_legs_angles[0];
+        result_positions[i][7] = rear_legs_angles[1];
+        result_positions[i][8] = rear_legs_angles[2];
+        result_positions[i][9] = standby_legs_angles[0];
+        result_positions[i][10] = standby_legs_angles[1];
+        result_positions[i][11] = standby_legs_angles[2];
+      }
+      else  {
+        result_positions[i][0] = front_legs_angles[0];
+        result_positions[i][1] = front_legs_angles[1];
+        result_positions[i][2] = front_legs_angles[2];
+        result_positions[i][3] = standby_legs_angles[0];
+        result_positions[i][4] = standby_legs_angles[1];
+        result_positions[i][5] = standby_legs_angles[2];
+        result_positions[i][6] = standby_legs_angles[0];
+        result_positions[i][7] = standby_legs_angles[1];
+        result_positions[i][8] = standby_legs_angles[2];
+        result_positions[i][9] = rear_legs_angles[0];
+        result_positions[i][10] = rear_legs_angles[1];
+        result_positions[i][11] = rear_legs_angles[2];
+      }
     }
-    else  {
-      result_positions[i][0] = right_legs_angles[0];
-      result_positions[i][1] = right_legs_angles[1];
-      result_positions[i][2] = right_legs_angles[2];
-      result_positions[i][3] = standby_legs_angles[0];
-      result_positions[i][4] = standby_legs_angles[1];
-      result_positions[i][5] = standby_legs_angles[2];
-      result_positions[i][6] = standby_legs_angles[0];
-      result_positions[i][7] = standby_legs_angles[1];
-      result_positions[i][8] = standby_legs_angles[2];
-      result_positions[i][9] = left_legs_angles[0];
-      result_positions[i][10] = left_legs_angles[1];
-      result_positions[i][11] = left_legs_angles[2];
+    else {
+      if(i < n_steps/2){
+        result_positions[i][0] = front_legs_angles[0];
+        result_positions[i][1] = front_legs_angles[1];
+        result_positions[i][2] = front_legs_angles[2];
+        result_positions[i][3] = standby_legs_angles[0];
+        result_positions[i][4] = standby_legs_angles[1];
+        result_positions[i][5] = standby_legs_angles[2];
+        result_positions[i][6] = standby_legs_angles[0];
+        result_positions[i][7] = standby_legs_angles[1];
+        result_positions[i][8] = standby_legs_angles[2];
+        result_positions[i][9] = rear_legs_angles[0];
+        result_positions[i][10] = rear_legs_angles[1];
+        result_positions[i][11] = rear_legs_angles[2];
+      }
+      else  {
+        result_positions[i][0] = standby_legs_angles[0];
+        result_positions[i][1] = standby_legs_angles[1];
+        result_positions[i][2] = standby_legs_angles[2];
+        result_positions[i][3] = front_legs_angles[0];
+        result_positions[i][4] = front_legs_angles[1];
+        result_positions[i][5] = front_legs_angles[2];
+        result_positions[i][6] = rear_legs_angles[0];
+        result_positions[i][7] = rear_legs_angles[1];
+        result_positions[i][8] = rear_legs_angles[2];
+        result_positions[i][9] = standby_legs_angles[0];
+        result_positions[i][10] = standby_legs_angles[1];
+        result_positions[i][11] = standby_legs_angles[2];
+      }  
     }
     j++;
   }
@@ -193,21 +229,21 @@ GaitPlanifier::spin_joint_positions(const std::vector<std::array<float, 3>>& gai
 std::vector<std::array<float, 12>>
 GaitPlanifier::calculate_joint_positions(const std::vector<std::array<float, 3>>& gait_steps_per_leg)
 {
-  size_t n_steps = gait_steps_per_leg.size();
+  size_t n_steps = gait_steps_per_leg.size()*2;
   std::vector<std::array<float, 12>> result_positions;
-  result_positions.resize(n_steps*2);
-  int j = 0;
+  result_positions.resize(n_steps);
+  size_t j = 0;
   /* for each step, legs are ordered front left, front right, back left, back right
   and right now only gait_type supported is intercalated (first 2 opossing legs,then the other 2);
   */ 
-  for(size_t i = 0; i < n_steps*2; i++)
+  for(size_t i = 0; i < n_steps; i++)
   {
-    if(j >= n_steps) {
+    if(j >= n_steps/2) {
       j = 0;
     }
     std::array<float, 3> moving_legs_angles = get_leg_angles(gait_steps_per_leg[j]);
     std::array<float, 3> standby_legs_angles = get_leg_angles(DEFAULT_STANDBY[0]);
-    if(i < n_steps){
+    if(i < n_steps/2){
       result_positions[i][0] = moving_legs_angles[0];
       result_positions[i][1] = moving_legs_angles[1];
       result_positions[i][2] = moving_legs_angles[2];
@@ -254,7 +290,7 @@ GaitPlanifier::get_joint_trajectory(const Twist & twist)
   result_gait.joint_names = joint_names_;
   std::vector<std::array<float ,12>> joint_positions;
   float step_time;
-  float movement_velocity;
+  float movement_velocity = 0.5;
 
   if(twist.linear.x != 0 && twist.linear.y == 0 && twist.angular.z == 0) {
     if(twist.linear.x > 0) {
@@ -291,7 +327,8 @@ GaitPlanifier::get_joint_trajectory(const Twist & twist)
     joint_positions = default_standby_;
   }
   else if(twist.linear.x != 0 && twist.linear.y != 0 && twist.angular.z == 0) {
-    joint_positions = default_standby_;
+    joint_positions = sit_;
+    //It uses sit gait at the moment for test
     //Not yet supported but will in the future make a specific gait for this case
   }
   else {
@@ -300,27 +337,16 @@ GaitPlanifier::get_joint_trajectory(const Twist & twist)
   }
   ngait_points_ = joint_positions.size();
   //Aqui puedo quitar el if y hacer que este trozo de funcion valga para ambos casos?
-  if(joint_positions != default_standby_) {
-    result_gait.points.resize(ngait_points_);
-    step_time = get_step_time(joint_positions, movement_velocity);
-    for (size_t i = 0; i < ngait_points_; i++) {
-          result_gait.points[i].positions.resize(njoints_);
-          for(size_t j = 0; j < njoints_ ; j++) {
-            result_gait.points[i].positions[j] = joint_positions[i][j];
-          }
-          // Times depending on velocity received
-          result_gait.points[i].time_from_start.sec = 0;
-          result_gait.points[i].time_from_start.nanosec =  static_cast<uint32_t>(step_time * 1e9) * (i + 1);;
-    }
-  }
-  else {
-    result_gait.points.resize(1);
-    result_gait.points[0].positions.resize(njoints_);
-    for(size_t i = 0; i < njoints_ ; i++) {
-      result_gait.points[0].positions[i] = joint_positions[0][i];
-    }
-    result_gait.points[0].time_from_start.sec = 0;
-    result_gait.points[0].time_from_start.nanosec = 55000000;
+  result_gait.points.resize(ngait_points_);
+  step_time = get_step_time(joint_positions, movement_velocity);
+  for (size_t i = 0; i < ngait_points_; i++) {
+        result_gait.points[i].positions.resize(njoints_);
+        for(size_t j = 0; j < njoints_ ; j++) {
+          result_gait.points[i].positions[j] = joint_positions[i][j];
+        }
+        // Times depending on velocity received
+        result_gait.points[i].time_from_start.sec = 0;
+        result_gait.points[i].time_from_start.nanosec =  static_cast<uint32_t>(step_time * 1e9) * (i + 1);;
   }
 
   return result_gait;
@@ -476,9 +502,9 @@ GaitPlanifier::control_cycle()
         RCLCPP_INFO(get_logger(), "outdated vel,proceding to standby");
         current_trajectory_ = get_joint_trajectory(standby_twist_);
         current_twist_ = standby_twist_;
-        send_request(current_trajectory_);
-        state_ = EXECUTING;
       }
+      send_request(current_trajectory_);
+      state_ = EXECUTING;
       break;
 
     case WALKING:
