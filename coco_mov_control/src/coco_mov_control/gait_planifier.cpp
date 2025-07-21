@@ -20,8 +20,8 @@ namespace
   std::vector<std::array<float, 3>> DEFAULT_FORWARD_GAIT = {
     {0, 145.0, 35.0},
     {0, 175.0, 35.0},
-    {55, 175.0, 35.0},
-    {55, 145.0, 35.0}
+    {40, 175.0, 35.0},
+    {40, 145.0, 35.0}
   };
   std::vector<std::array<float, 3>> DEFAULT_BACKWARD_GAIT = {
     {35, 145.0, 35.0},
@@ -30,18 +30,18 @@ namespace
     {-10, 145.0, 35.0}
   };
   std::vector<std::array<float, 3>> DEFAULT_LEFT_GAIT = {
-    {0.0, 145.0, 45.0},
-    {0.0, 163.0, 52.5},
-    {0.0, 170.0, 60.0},
-    {0.0, 163.0, 67.5},
+    {0.0, 145.0, 35.0},
+    {0.0, 163.0, 47.5},
+    {0.0, 170.0, 55.0},
+    {0.0, 163.0, 62.5},
     {0.0, 145.0, 75.0}
   };
   std::vector<std::array<float, 3>> DEFAULT_RIGHT_GAIT = {
-    {0.0, 145.0, 50.0},
-    {0.0, 163.0, 37.5},
-    {0.0, 170.0, 30.0},
+    {0.0, 145.0, 35.0},
     {0.0, 163.0, 22.5},
-    {0.0, 145.0, 10.0}
+    {0.0, 170.0, 15.0},
+    {0.0, 163.0, 7.5},
+    {0.0, 145.0, -5.0}
   };
   std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{0.0, 145.0, 35.0}};
 }
@@ -149,6 +149,16 @@ GaitPlanifier::spin_joint_positions(const std::vector<std::array<float, 3>>& gai
   std::vector<std::array<float, 12>> result_positions;
   result_positions.resize(n_steps);
   size_t j = 0;
+  std::vector<std::array<float,3>> gait_rear_legs_fixed = gait_rear_legs;
+  for(size_t k = 1; k < n_steps; k++){
+    if(right_spin){
+      gait_rear_legs_fixed[k][2] -= 10.0;
+    }
+    else {
+      gait_rear_legs_fixed[k][2] += 10.0;
+    }
+  }
+
   for(size_t i = 0; i < n_steps; i++)
   {
     if(j >= n_steps/2) {
@@ -156,7 +166,7 @@ GaitPlanifier::spin_joint_positions(const std::vector<std::array<float, 3>>& gai
     }
     
     std::array<float, 3> front_legs_angles = get_leg_angles(gait_front_legs[j]);
-    std::array<float, 3> rear_legs_angles = get_leg_angles(gait_rear_legs[j]);
+    std::array<float, 3> rear_legs_angles = get_leg_angles(gait_rear_legs_fixed[j]);
 
     std::array<float, 3> standby_legs_angles = get_leg_angles(DEFAULT_STANDBY[0]);
     if(right_spin){
