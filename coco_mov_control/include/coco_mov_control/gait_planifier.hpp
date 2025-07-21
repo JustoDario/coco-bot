@@ -61,7 +61,7 @@ private:
   const float max_vel_ = 0.4;
   const float std_vel_ = 0.25;
   const float min_vel_ = 0.15;
-  const float std_real_step_time = 1.2;//secs
+  const float std_real_step_time = 1;//secs
 
   static const int STANDBY = 0;
   static const int WALKING = 1;
