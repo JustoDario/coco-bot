@@ -18,32 +18,32 @@
 namespace
 {
   std::vector<std::array<float, 3>> DEFAULT_FORWARD_GAIT = {
-    {0, 145.0, 35.0},
-    {0, 175.0, 35.0},
-    {40, 175.0, 35.0},
-    {40, 145.0, 35.0}
+    {-7, 150.0, 40.0},
+    {-7, 175.0, 40.0},
+    {30, 175.0, 40.0},
+    {30, 150.0, 40.0}
   };
   std::vector<std::array<float, 3>> DEFAULT_BACKWARD_GAIT = {
-    {35, 145.0, 35.0},
-    {35, 175.0, 35.0},
-    {-10, 175.0, 35.0},
-    {-10, 145.0, 35.0}
+    {35, 150.0, 40.0},
+    {35, 175.0, 40.0},
+    {10, 175.0, 40.0},
+    {10, 150.0, 40.0}
   };
   std::vector<std::array<float, 3>> DEFAULT_LEFT_GAIT = {
-    {0.0, 145.0, 35.0},
-    {0.0, 163.0, 47.5},
-    {0.0, 170.0, 55.0},
-    {0.0, 163.0, 62.5},
-    {0.0, 145.0, 75.0}
+    {5, 150.0, 40.0},
+    {5, 170.0, 47.5},
+    {5, 185.0, 55.0},
+    {5, 170.0, 62.5},
+    {5, 150.0, 75.0}
   };
   std::vector<std::array<float, 3>> DEFAULT_RIGHT_GAIT = {
-    {0.0, 145.0, 35.0},
-    {0.0, 163.0, 22.5},
-    {0.0, 170.0, 15.0},
-    {0.0, 163.0, 7.5},
-    {0.0, 145.0, -5.0}
+    {5.0, 150.0, 40.0},
+    {5.0, 170.0, 32.5},
+    {5.0, 185.0, 25.0},
+    {5.0, 170.0, 17.5},
+    {5.0, 150.0, 5.0}
   };
-  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{0.0, 145.0, 35.0}};
+  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{5.0, 150.0, 40.0}};
 }
 namespace coco_mov_control
 {
@@ -150,13 +150,14 @@ GaitPlanifier::spin_joint_positions(const std::vector<std::array<float, 3>>& gai
   result_positions.resize(n_steps);
   size_t j = 0;
   std::vector<std::array<float,3>> gait_rear_legs_fixed = gait_rear_legs;
-  for(size_t k = 1; k < n_steps; k++){
+  for(size_t k = 1; k < n_steps/2; k++){
     if(right_spin){
       gait_rear_legs_fixed[k][2] -= 10.0;
     }
     else {
       gait_rear_legs_fixed[k][2] += 10.0;
     }
+    gait_rear_legs_fixed[k][0] += 3.0;
   }
 
   for(size_t i = 0; i < n_steps; i++)
