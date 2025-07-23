@@ -17,12 +17,23 @@
 
 namespace
 {
+
   std::vector<std::array<float, 3>> DEFAULT_FORWARD_GAIT = {
-    {-7, 150.0, 40.0},
-    {-7, 175.0, 40.0},
-    {30, 175.0, 40.0},
-    {30, 150.0, 40.0}
+    {0, 167.0, 40.0},
+    {0, 185.0, 40.0},
+    {50, 185.0, 40.0},
+    {50, 167.0, 40.0}
   };
+/*
+std::vector<std::array<float, 3>> DEFAULT_FORWARD_GAIT = {
+    {25, 175.0, 40.0},
+    {25, 140.0, 40.0},
+    {-5, 140.0, 40.0},
+    {-5, 140.0, 40.0},
+    {12.5, 175.0, 40.0},
+    {9.5, 175.0, 40.0}
+  };
+*/
   std::vector<std::array<float, 3>> DEFAULT_BACKWARD_GAIT = {
     {35, 150.0, 40.0},
     {35, 175.0, 40.0},
@@ -43,7 +54,7 @@ namespace
     {5.0, 170.0, 17.5},
     {5.0, 150.0, 5.0}
   };
-  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{5.0, 150.0, 40.0}};
+  std::vector<std::array<float, 3>> DEFAULT_STANDBY = {{0.0, 170.0, 40.0}};
 }
 namespace coco_mov_control
 {

@@ -70,8 +70,8 @@ private:
   std::vector<double> hw_states_;
   std::vector<double> servos_offsets_ = {
   11*M_PI/180,
-  5*M_PI/180 ,
-  4*M_PI/180 ,
+  3.7*M_PI/180 ,
+  3.2*M_PI/180 ,
   14*M_PI/180 ,
   6*M_PI/180 ,
   2*M_PI/180 ,
