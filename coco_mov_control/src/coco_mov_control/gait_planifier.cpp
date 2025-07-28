@@ -163,17 +163,17 @@ GaitPlanifier::spin_joint_positions(const std::vector<std::array<float, 3>>& gai
   std::vector<std::array<float,3>> gait_rear_legs_fixed = gait_rear_legs;
   for(size_t k = 1; k < n_steps/2; k++){
     if(right_spin){
-      gait_rear_legs_fixed[k][2] -= 10.0;
+      gait_rear_legs_fixed[k][2] -= 7.5;
     }
     else {
-      gait_rear_legs_fixed[k][2] += 10.0;
+      gait_rear_legs_fixed[k][2] += 7.5;
     }
     gait_rear_legs_fixed[k][0] += 3.0;
   }
 
   for(size_t i = 0; i < n_steps; i++)
   {
-    if(j >= n_steps/2) {
+    if(j == n_steps/2) {
       j = 0;
     }
     
