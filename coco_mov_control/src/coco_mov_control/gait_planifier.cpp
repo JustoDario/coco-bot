@@ -197,34 +197,34 @@ GaitPlanifier::spin_joint_positions(const std::vector<std::array<float, 3>>& gai
         result_positions[i][11] = standby_legs_angles[2];
       }
       else  {
-        result_positions[i][0] = front_legs_angles[0];
-        result_positions[i][1] = front_legs_angles[1];
-        result_positions[i][2] = front_legs_angles[2];
+        result_positions[i][0] = rear_legs_angles[0];
+        result_positions[i][1] = rear_legs_angles[1];
+        result_positions[i][2] = rear_legs_angles[2];
         result_positions[i][3] = standby_legs_angles[0];
         result_positions[i][4] = standby_legs_angles[1];
         result_positions[i][5] = standby_legs_angles[2];
         result_positions[i][6] = standby_legs_angles[0];
         result_positions[i][7] = standby_legs_angles[1];
         result_positions[i][8] = standby_legs_angles[2];
-        result_positions[i][9] = rear_legs_angles[0];
-        result_positions[i][10] = rear_legs_angles[1];
-        result_positions[i][11] = rear_legs_angles[2];
+        result_positions[i][9] = front_legs_angles[0];
+        result_positions[i][10] = front_legs_angles[1];
+        result_positions[i][11] = front_legs_angles[2];
       }
     }
     else {
       if(i < n_steps/2){
-        result_positions[i][0] = front_legs_angles[0];
-        result_positions[i][1] = front_legs_angles[1];
-        result_positions[i][2] = front_legs_angles[2];
+        result_positions[i][0] = rear_legs_angles[0];
+        result_positions[i][1] = rear_legs_angles[1];
+        result_positions[i][2] = rear_legs_angles[2];
         result_positions[i][3] = standby_legs_angles[0];
         result_positions[i][4] = standby_legs_angles[1];
         result_positions[i][5] = standby_legs_angles[2];
         result_positions[i][6] = standby_legs_angles[0];
         result_positions[i][7] = standby_legs_angles[1];
         result_positions[i][8] = standby_legs_angles[2];
-        result_positions[i][9] = rear_legs_angles[0];
-        result_positions[i][10] = rear_legs_angles[1];
-        result_positions[i][11] = rear_legs_angles[2];
+        result_positions[i][9] = front_legs_angles[0];
+        result_positions[i][10] = front_legs_angles[1];
+        result_positions[i][11] = front_legs_angles[2];
       }
       else  {
         result_positions[i][0] = standby_legs_angles[0];

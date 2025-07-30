@@ -3,11 +3,12 @@
 import os
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, RegisterEventHandler
-from launch.conditions import IfCondition, UnlessCondition
+from launch.conditions import IfCondition
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 from launch.event_handlers import OnProcessExit
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+from ament_index_python.packages import get_package_share_directory
 
 
 def generate_launch_description():
@@ -89,6 +90,19 @@ def generate_launch_description():
         output="screen",
     )
 
+    # BNO055 IMU node
+    bno_config = os.path.join(
+        get_package_share_directory('bno055'),
+        'config',
+        'bno055_params.yaml'
+    )
+    bno_node = Node(
+        package='bno055',
+        executable='bno055',
+        parameters=[bno_config],
+        output='screen',
+    )
+
     # Joint trajectory controller
     joint_trajectory_controller_spawner = Node(
         package="controller_manager",
@@ -129,7 +143,6 @@ def generate_launch_description():
         name="gait_planifier",
         output="screen",
     )
-
     # Event handler para lanzar gait_planifier después del spawner del joint_trajectory_controller
     delay_gait_planifier_after_joint_trajectory_controller_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
@@ -138,7 +151,7 @@ def generate_launch_description():
         )
     )
 
-    #RViz2
+    # RViz2
     rviz_config_file = PathJoinSubstitution(
         [FindPackageShare(description_package), "urdf", "coco.rviz"]
     )
@@ -156,6 +169,7 @@ def generate_launch_description():
         robot_state_pub_node,
         joint_state_publisher_node,
         joint_state_broadcaster_spawner,
+        bno_node,
         joint_trajectory_controller_spawner,
         delay_gait_planifier_after_joint_trajectory_controller_spawner,
         rviz_node,

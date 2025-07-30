@@ -24,7 +24,27 @@
     </geometry>
   </collision>
 </link>
+<link name="imu_link">
+  <inertial>
+    <origin xyz="-0.1171941 -0.01 -0.0302" rpy="0 0 1.57"/>
+    <mass value="0.01"/>
+    <inertia 
+      ixx="1e-6" iyy="1e-6" izz="1e-6"
+      ixy="0" ixz="0" iyz="0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry><box size="0.02 0.02 0.02"/></geometry>
+    <material name="Blue"/>
+  </visual>
+</link>
 
+<joint name="base_to_imu" type="fixed">
+  <!-- 10 cm hacia atrás en X -->
+  <origin xyz="-0.10 0 0" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child  link="imu_link"/>
+</joint>
 <link name="rear_link_1">
   <inertial>
     <origin xyz="-0.034918114367350164 0.0007461285796454375 0.005485059366080493" rpy="0 0 0"/>
