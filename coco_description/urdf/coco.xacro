@@ -4,6 +4,13 @@
 <xacro:include filename="$(find coco_description)/urdf/materials.xacro" />
 <xacro:include filename="$(find coco_description)/urdf/coco.ros2_control.xacro" />
 
+<link name="odom"/>
+  <joint name="odom_to_base" type="fixed">
+    <parent link="odom"/>
+    <child  link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  
 <link name="base_link">
   <inertial>
     <origin xyz="0.01719416873843675 -0.010586956103026538 -0.030271020725176637" rpy="0 0 0"/>
@@ -26,7 +33,7 @@
 </link>
 <link name="imu_link">
   <inertial>
-    <origin xyz="-0.1171941 -0.01 -0.0302" rpy="0 0 1.57"/>
+    <origin xyz="-0.0171941 -0.01 -0.0302" rpy="0 0 0"/>
     <mass value="0.01"/>
     <inertia 
       ixx="1e-6" iyy="1e-6" izz="1e-6"
@@ -35,13 +42,12 @@
   <visual>
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <geometry><box size="0.02 0.02 0.02"/></geometry>
-    <material name="Blue"/>
+    <material name="silver"/>
   </visual>
 </link>
 
 <joint name="base_to_imu" type="fixed">
-  <!-- 10 cm hacia atrás en X -->
-  <origin xyz="-0.10 0 0" rpy="0 0 0"/>
+  <origin xyz="0.0 0 0" rpy="0 0 0"/>
   <parent link="base_link"/>
   <child  link="imu_link"/>
 </joint>
