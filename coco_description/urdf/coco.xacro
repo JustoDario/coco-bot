@@ -4,13 +4,15 @@
 <xacro:include filename="$(find coco_description)/urdf/materials.xacro" />
 <xacro:include filename="$(find coco_description)/urdf/coco.ros2_control.xacro" />
 
+<link name="map"/>
 <link name="odom"/>
-  <joint name="odom_to_base" type="fixed">
-    <parent link="odom"/>
-    <child  link="base_link"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
-  </joint>
-  
+<link name="base_footprint"/>
+<joint name="odom_to_footprint" type="fixed">
+  <parent link="odom"/>
+  <child  link="base_footprint"/>
+  <origin xyz="0 0 0" rpy="0 0 0"/>
+</joint>
+
 <link name="base_link">
   <inertial>
     <origin xyz="0.01719416873843675 -0.010586956103026538 -0.030271020725176637" rpy="0 0 0"/>
@@ -31,6 +33,13 @@
     </geometry>
   </collision>
 </link>
+
+<joint name="footprint_to_base" type="fixed">
+  <parent link="base_footprint"/>
+  <child  link="base_link"/>
+  <!-- set at standby high -->
+  <origin xyz="0 0 0.2" rpy="0 0 0"/>
+</joint>
 <link name="imu_link">
   <inertial>
     <origin xyz="-0.0171941 -0.01 -0.0302" rpy="0 0 0"/>
